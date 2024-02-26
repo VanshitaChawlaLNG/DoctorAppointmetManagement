@@ -1,0 +1,48 @@
+﻿@model IEnumerable<ApplicationUser>
+
+@using DoctorAppointmentManagement.Data
+@{
+    Layout = "AdminLayout";
+    ViewData["Title"] = "Home";
+}
+
+<section class="card">
+    <div class="card-header">
+        <h2>Manage Users</h2>
+    </div>
+
+    @using (Html.BeginForm())
+    {
+        <div>
+            <table width="1000px" style="color: blueviolet">
+                <thead>
+                <th>@Html.DisplayNameFor(model => model.UserName)</th>
+                <th>@Html.DisplayNameFor(model => model.Email)</th>
+                <th>@Html.DisplayNameFor(model => model.Name)</th>
+                <th>Actions </th>
+                </thead>
+
+                <tbody>
+                    @foreach (var user in Model.Where(u => !User.IsInRole("Doctors")))
+                    {
+                        <tr>
+                            <td>@Html.DisplayFor(model => user.UserName)</td>
+                            <td>@Html.DisplayFor(model => user.Email)</td>
+                            <td>@Html.DisplayFor(model => user.Name)</td>
+                            <td>
+                                <div class="w-75 btn-group" role="group">
+                                    <a asp-controller="Admin" asp-action="EditUser" asp-route-id="@user.Id">
+                                        <i class="bi bi-pencil-square">Edit</i>
+                                    </a>
+                                    <a asp-controller="Admin" asp-action="DeleteUser" asp-route-id="@user.Id">
+                                        <i class="bi bi-pencil-square">Delete</i>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</section>

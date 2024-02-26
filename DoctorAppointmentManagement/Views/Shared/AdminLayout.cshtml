@@ -1,0 +1,86 @@
+﻿@using DoctorAppointmentManagement.Data
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<ApplicationUser> SignInManager
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Admin Panel</title>
+	<link rel="stylesheet" href="~/css/Adminstyles.css" asp-append-version="true" />
+	<script src="https://kit.fontawesome.com/b99e675b6e.js"></script>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+	<div class="wrapper">
+		<div class="wrapper_inner">
+			<div class="vertical_wrap">
+				<div class="backdrop"></div>
+				<div class="vertical_bar">
+					<div class="profile_info">
+						
+						<p class="title">ADMIN</p>
+						<p class="sub_title">admin@gmail.com</p>
+					</div>
+					<ul class="menu">
+						<li>
+							<a href="#">
+								<span class="icon"><i class="fas fa-home"></i></span>
+								<span class="text">Dashboard</span>
+							</a>
+						</li>
+						<li>
+							<a href="IndexDoctor" class="active">
+								<span class="icon"><i class="fas fa-file-alt"></i></span>
+								<span class="text">Manage Doctors</span>
+							</a>
+						</li>
+						<li>
+							<a href="#">
+								<span class="icon"><i class="fas fa-chart-pie"></i></span>
+								<span class="text">Manage Appointments</span>
+							</a>
+						</li>
+						<li>
+							<a href="/Admin/indexUser">
+								<span class="icon"><i class="fas fa-user"></i></span>
+								<span class="text">Users</span>
+							</a>
+						</li>
+						<li>
+							<a href="/User/Index">
+								<span class="icon"><i class="fas fa-cog"></i></span>
+								<span class="text">Back</span>
+							</a>
+						</li>
+					</ul>
+
+				</div>
+			</div>
+			<div class="container">
+				<main role="main" class="pb-3">
+					@RenderBody()
+				</main>
+			</div>
+		
+	</div>
+	</div>
+		
+
+	
+	 
+	@await RenderSectionAsync("Scripts", required: false)
+	<script>
+		var hamburger = document.querySelector(".hamburger");
+		var wrapper = document.querySelector(".wrapper");
+		var backdrop = document.querySelector(".backdrop");
+
+		hamburger.addEventListener("click", function () {
+			wrapper.classList.add("active");
+		})
+
+		backdrop.addEventListener("click", function () {
+			wrapper.classList.remove("active");
+		})
+	</script>
+</body>
+</html>

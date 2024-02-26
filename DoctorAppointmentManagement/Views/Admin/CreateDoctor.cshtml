@@ -1,0 +1,102 @@
+﻿@model Doctor
+@{
+    Layout = "AdminLayout";
+    ViewData["Title"] = "Create";
+}
+
+<style>
+    section.card {
+        max-width: 500px;
+        margin: auto;
+        margin-top: 50px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        border-radius: 10px;
+        overflow: hidden;
+        justify-content:center;
+        align-items:center
+    }
+
+    .card-header {
+        background-color: #007bff;
+        color: white;
+        padding: 20px;
+        text-align: center;
+    }
+
+    .form-label {
+        font-weight: bold;
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 10px;
+        margin: 8px 0;
+        display: inline-block;
+        border: 1px solid #ccc;
+        box-sizing: border-box;
+        border-radius: 5px;
+    }
+
+
+
+
+</style>
+
+<section class="card">
+    <form method="post" asp-action="CreateDoctor" class="p-4" enctype="multipart/form-data">
+        <div class="card-header">
+            <h2>Create Doctor</h2>
+        </div>
+
+        <div asp-validation-summary="All"></div>
+
+        <div class="mb-3">
+            <label asp-for="Name" class="form-label">Doctor Name</label>
+            <input asp-for="Name" class="form-control" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Description" class="form-label">Description</label>
+            <input asp-for="Description" class="form-control" />
+            <span asp-validation-for="Description" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Email" class="form-label">Email</label>
+            <input asp-for="Email" class="form-control" />
+            <span asp-validation-for="Email" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Password" class="form-label">Password</label>
+            <input asp-for="Password" type="password" class="form-control" />
+            <span asp-validation-for="Password" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Fees" class="form-label">Fees</label>
+            <input asp-for="Fees" class="form-control" />
+            <span asp-validation-for="Fees" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="ProfilePictureFile" class="control-label"></label>
+            <input asp-for="ProfilePictureFile" type="file" value="Upload" class="form-control" />
+            <span asp-validation-for="ProfilePictureFile" class="text-danger"></span>
+
+            @if (!string.IsNullOrEmpty(Model?.ProfilePicture))
+            {
+                <div class="mt-2">
+                    <img src="@Model.ProfilePicture" alt="Profile Picture" style="max-width: 100%; height: auto;" />
+                </div>
+            }
+        </div>
+
+        <div class="d-grid gap-2">
+            <button type="submit" class="btn btn-primary" style=" align:center;background-color: #007bff; color: #ffffff; padding:10px;border-radius:4px;">Create</button>
+
+            <a asp-controller="Admin" asp-action="IndexDoctor" class="btn btn-secondary">Back to List</a>
+        </div>
+    </form>
+</section>

@@ -1,0 +1,31 @@
+﻿@model IEnumerable<Doctor>
+
+@{
+    
+    ViewData["Title"] = "Manage Doctors";
+}
+
+<section>
+    <div class="card-header" style="margin-bottom: 50px;">
+        <h2>For Your Service</h2>
+    </div>
+
+    <div id="doctors-container">
+        @foreach (var doctor in Model)
+        {
+            <div class="card-User">
+                @if (!string.IsNullOrEmpty(doctor?.ProfilePicture))
+                {
+                    <img src="@doctor.ProfilePicture" alt="Profile Picture" />
+                }
+                <div class="container">
+                    <h4><b>@doctor.Name</b></h4>
+                    <p>Description: @doctor.Description</p>
+                    <p>Fees: @doctor.Fees</p>
+
+                    <button class="btn-close-white" asp-controller="User" asp-action="AppointmentAdd()">Appoint</button>
+                </div>
+            </div>
+        }
+    </div>
+</section>
