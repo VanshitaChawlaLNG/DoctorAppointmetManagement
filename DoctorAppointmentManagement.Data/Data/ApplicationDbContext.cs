@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using DoctorAppointmentManagement.Models;
+using DoctorAppointmentManagement.Contracts;
+using Microsoft.AspNetCore.Http;
 
 namespace DoctorAppointmentManagement.Data
 {

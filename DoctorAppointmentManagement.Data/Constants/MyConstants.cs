@@ -1,4 +1,4 @@
-﻿namespace DoctorAppointmentManagement.Constants
+﻿namespace DoctorAppointmentManagement.Contracts.Constants
 {
     public enum Roles{
         Admin,

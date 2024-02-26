@@ -5,10 +5,6 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
-
-  <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.Abstractions" Version="2.2.0" />
-  </ItemGroup>
 	<ItemGroup>
 		<PackageReference Include="Lamar" Version="13.0.3" />
 		<PackageReference Include="Lamar.Microsoft.DependencyInjection" Version="13.0.3" />
@@ -20,8 +16,4 @@
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.2" />
 		<PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.1" />
 	</ItemGroup>
-	<ItemGroup>
-	  <ProjectReference Include="..\DoctorAppointmentManagement.Data\DoctorAppointmentManagement.Data.csproj" />
-	</ItemGroup>
-
 </Project>

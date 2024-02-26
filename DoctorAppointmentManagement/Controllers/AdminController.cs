@@ -1,15 +1,15 @@
-﻿using DoctorAppointmentManagement.Constants;
+﻿
+using DoctorAppointmentManagement.Contracts;
+using DoctorAppointmentManagement.Contracts.Constants;
 using DoctorAppointmentManagement.Data;
-using DoctorAppointmentManagement.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 
 namespace DoctorAppointmentManagement.Controllers
 {
-    [Authorize(Roles = "Admin")]
+	[Authorize(Roles = "Admin")]
     public class AdminController : Controller
     {
         private readonly ApplicationDbContext _db;
@@ -85,13 +85,13 @@ namespace DoctorAppointmentManagement.Controllers
             return View(obj);
         }
 
-        public async Task<IActionResult> IndexUser()
-        {
-            IEnumerable<ApplicationUser> objUserList = _db.Users;
-            return View(objUserList);
-        }
+		public IActionResult IndexUser()
+		{
+			IEnumerable<ApplicationUser> objUserList = _db.Users;
+			return View(objUserList);
+		}
 
-        public async Task<IActionResult> DeleteDoctor(int id)
+		public async Task<IActionResult> DeleteDoctor(int id)
         {
             if(id == 0 || id == null)
             {

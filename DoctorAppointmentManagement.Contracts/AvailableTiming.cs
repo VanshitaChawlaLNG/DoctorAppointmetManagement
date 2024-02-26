@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace DoctorAppointmentManagement.Models
+namespace DoctorAppointmentManagement.Contracts
 {
     public class AvailableTiming
     {

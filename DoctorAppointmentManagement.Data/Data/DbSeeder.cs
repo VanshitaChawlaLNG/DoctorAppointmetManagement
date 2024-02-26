@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System;
-using DoctorAppointmentManagement.Constants;
+
+using Microsoft.Extensions.DependencyInjection;
+using DoctorAppointmentManagement.Contracts.Constants;
 
 namespace DoctorAppointmentManagement.Data
 {

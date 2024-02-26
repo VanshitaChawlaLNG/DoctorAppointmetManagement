@@ -1,4 +1,5 @@
-﻿using DoctorAppointmentManagement.Data;
+﻿using DoctorAppointmentManagement.Contracts;
+using DoctorAppointmentManagement.Data;
 using DoctorAppointmentManagement.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
@@ -29,10 +30,10 @@ namespace DoctorAppointmentManagement.Controllers
             return View();
         }
 
-        public IActionResult AppointmentAdd(int id)
+      /*  public IActionResult AppointmentAdd(int id)
         {
-            return AppontmentServices(id); 
-        }
+            return AppointmentServices(id); 
+        }*/
         public IActionResult GetProfilePicture(string fileName)
         {
             var filePath = Path.Combine(_webHostEnvironment.WebRootPath, "ProfilePictures", fileName);

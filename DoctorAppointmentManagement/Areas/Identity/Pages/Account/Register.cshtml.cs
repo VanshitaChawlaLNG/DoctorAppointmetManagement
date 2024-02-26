@@ -10,7 +10,7 @@ using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading;
 using System.Threading.Tasks;
-using DoctorAppointmentManagement.Constants;
+using DoctorAppointmentManagement.Contracts.Constants;
 using DoctorAppointmentManagement.Data;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;

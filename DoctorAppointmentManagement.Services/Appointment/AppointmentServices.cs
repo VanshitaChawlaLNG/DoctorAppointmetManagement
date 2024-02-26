@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace DoctorAppointmentManagement.Services.Appointment
 {
-    public class AppointmentServices : IAppointmentServices
-    {
-        public async Task<IActionResult> DoctorAppointment(int id)
-        {
-          
-        }
-    }
+	public class AppointmentServices : IAppointmentServices
+	{
+		public Task<IActionResult> DoctorAppointment(int id)
+		{
+			throw new NotImplementedException();
+		}
+	}
 }
