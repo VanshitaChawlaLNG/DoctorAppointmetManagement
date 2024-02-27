@@ -1,6 +1,7 @@
 ﻿using DoctorAppointmentManagement.Contracts;
 using DoctorAppointmentManagement.Data;
 using DoctorAppointmentManagement.Models;
+using DoctorAppointmentManagement.Services.Appointment;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -13,27 +14,42 @@ namespace DoctorAppointmentManagement.Controllers
     {
         private readonly ApplicationDbContext _db;
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IAppointmentServices _appointmentServices;
         private readonly IWebHostEnvironment _webHostEnvironment;
 
-        public UserController(ApplicationDbContext db, UserManager<ApplicationUser> userManager)
+        public UserController(ApplicationDbContext db, UserManager<ApplicationUser> userManager,IAppointmentServices AppointmentServices)
         {
             _db = db;
             _userManager = userManager;
+            _appointmentServices= AppointmentServices;
         }
         public IActionResult Index()
         {
             IEnumerable<Doctor> obj = _db.Doctors;
             return View(obj);
         }
-        public IActionResult Privacy()
+        public IActionResult Appointment()
         {
+
             return View();
         }
 
-      /*  public IActionResult AppointmentAdd(int id)
+        [HttpPost]
+
+        [AutoValidateAntiforgeryToken]
+        public IActionResult Appointment(Appointment appointment)
         {
-            return AppointmentServices(id); 
-        }*/
+            if (appointment == null)
+            {
+                TempData["ErrorMessage"] = "Missing Entries By The User";
+                return View("Error");
+            }
+
+
+            return RedirectToAction("Action");
+        }
+
+
         public IActionResult GetProfilePicture(string fileName)
         {
             var filePath = Path.Combine(_webHostEnvironment.WebRootPath, "ProfilePictures", fileName);

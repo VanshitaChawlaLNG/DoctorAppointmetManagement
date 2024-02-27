@@ -51,7 +51,7 @@ namespace DoctorAppointmentManagement.Controllers
             {
                 if (obj.ProfilePictureFile != null && obj.ProfilePictureFile.Length > 0)
                 {
-                    // Generate a unique file name
+                    
                     var fileName = Guid.NewGuid().ToString() + "_" + obj.ProfilePictureFile.FileName;
 
                    
@@ -62,7 +62,6 @@ namespace DoctorAppointmentManagement.Controllers
                         await obj.ProfilePictureFile.CopyToAsync(stream);
                     }
 
-                    // Save the file path to the database
                     obj.ProfilePicture = "/Uploads/" + fileName;
                 }
                 

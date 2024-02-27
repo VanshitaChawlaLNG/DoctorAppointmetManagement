@@ -31,49 +31,56 @@ namespace DoctorAppointmentManagement.Controllers
 
 		[HttpPost]
 		[AutoValidateAntiforgeryToken]
-		public async Task<IActionResult> AddTimingpost(AvailableTiming availableTiming)
-		{
-			try
-			{
-                if (availableTiming== null)
+        public async Task<IActionResult> AddTimingpost(AvailableTiming availableTiming)
+        {
+            try
+            {
+                if (availableTiming == null)
                 {
-                    ModelState.AddModelError("Name", "The Fields are Not Correct Check Again");
+                    ModelState.AddModelError("Name", "The fields are not correct. Check again.");
                     return View();
                 }
+
                 ModelState.Clear();
+
                 if (ModelState.IsValid)
-				{
-					var user = await _userManager.GetUserAsync(User);
-					if (user == null)
-					{
-						return View("Error", new ErrorViewModel { ErrorMessage = "Failed to add timing. Please try again later. can't access user" });
-					}
+                {
+                    var user = await _userManager.GetUserAsync(User);
+                    if (user == null)
+                    {
+                        TempData["ErrorMessage"] = "Failed to Fetch User. Please try again later.";
+                        return RedirectToAction("Error");
+                    }
 
-					var timingResult = await _timingServices.AddAvailableTimings(availableTiming, user);
+                    var timingResult = await _timingServices.AddAvailableTimings(availableTiming, user);
 
-					if (timingResult is OkResult)
-					{
-						return RedirectToAction("IndexDoctor");
-					}
+                    if (timingResult is OkResult)
+                    {
+                        TempData["SuccessMessage"] = "Timing added successfully.";
+                        return RedirectToAction("IndexDoctor");
+                    }
 
-					return View("Error", new ErrorViewModel { ErrorMessage = "Failed to add timing. Please try again later." });
-				}
+                    TempData["ErrorMessage"] = "Failed to add timing. Please try again later.";
+                    return RedirectToAction("Error");
+                }
 
-				
-				var errorMessages = ModelState.Values
-					.SelectMany(v => v.Errors)
-					.Select(e => e.ErrorMessage)
-					.ToList();
+            
+                var errorMessages = ModelState.Values
+                    .SelectMany(v => v.Errors)
+                    .Select(e => e.ErrorMessage)
+                    .ToList();
 
-				return View("Error", new ErrorViewModel { ErrorMessage = $"Invalid model state. Please check your input. Errors: {string.Join(", ", errorMessages)}" });
-			}
-			catch (Exception ex)
-			{
-				Console.WriteLine($"An error occurred: {ex.Message}");
-				return View("Error", new ErrorViewModel { ErrorMessage = "An unexpected error occurred. Please contact support." });
-			}
-		}
+                TempData["ErrorMessage"] = $"Invalid model state. Please check your input. Errors: {string.Join(", ", errorMessages)}";
+                return RedirectToAction("Error");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"An error occurred: {ex.Message}");
+                TempData["ErrorMessage"] = "An unexpected error occurred. Please contact support.";
+                return RedirectToAction("Error");
+            }
+        }
 
-	}
+    }
 }
 
