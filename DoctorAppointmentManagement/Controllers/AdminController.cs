@@ -5,6 +5,7 @@ using DoctorAppointmentManagement.Data;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 
 namespace DoctorAppointmentManagement.Controllers
@@ -64,21 +65,27 @@ namespace DoctorAppointmentManagement.Controllers
                     // Save the file path to the database
                     obj.ProfilePicture = "/Uploads/" + fileName;
                 }
-                var user=new ApplicationUser { UserName=obj.Email,
-                    Email = obj.Email,
-                    Name = obj.Name,
-                    EmailConfirmed = true,
-                    PhoneNumberConfirmed = true
-                };
-                var result=await _userManager.CreateAsync(user,obj.Password);
-                if (result.Succeeded)
-                {
-                    await _userManager.AddToRoleAsync(user, Roles.Doctors.ToString());
-                }
+                
 
                 _db.Doctors.Add(obj);
                 _db.SaveChanges();
                 TempData["Success"] = "Field Inserted";
+                await _db.Doctors.SingleAsync(d => d.Id == obj.Id);
+                var user = new ApplicationUser
+                {
+                    UserName = obj.Email,
+                    Email = obj.Email,
+                    Name = obj.Name,
+                    DoctorId = obj.Id,
+                    EmailConfirmed = true,
+                    PhoneNumberConfirmed = true,
+
+                };
+                var result = await _userManager.CreateAsync(user, obj.Password);
+                if (result.Succeeded)
+                {
+                    await _userManager.AddToRoleAsync(user, Roles.Doctors.ToString());
+                }
                 return RedirectToAction("Index");
             }
 

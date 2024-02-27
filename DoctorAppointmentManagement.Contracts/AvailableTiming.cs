@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DoctorAppointmentManagement.Contracts
 {
@@ -6,16 +7,23 @@ namespace DoctorAppointmentManagement.Contracts
     {
         [Key]
         public int Id { get; set; }
-        [Required]
-        public string Day { get; set; }
-        [Required]
-        public string StartTime { get; set; }
-        [Required]
-        public string EndTime { get; set; }
 
         [Required]
-      
-        public string DoctorId { get; set; }
-        //public Doctor Doctor { get; set; }
+        public DateTime Date { get; set; }
+
+        [Required]
+        public int StartTimeHours { get; set; }
+
+        [Required]
+        public int StartTimeMins { get; set; }
+
+        [Required]
+        public int EndTimeHours { get; set; }
+
+        [Required]
+        public int EndTimeMins { get; set; }
+
+       public int DoctorId {  get; set; }
+
     }
 }

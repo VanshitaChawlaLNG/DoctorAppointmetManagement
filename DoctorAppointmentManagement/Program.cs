@@ -1,6 +1,7 @@
 using DoctorAppointmentManagement.AppDependancy;
 using DoctorAppointmentManagement.Data;
 using DoctorAppointmentManagement.Services;
+using DoctorAppointmentManagement.Services.AddTimingData;
 using Lamar.Microsoft.DependencyInjection;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -16,15 +17,16 @@ namespace DoctorAppointmentManagement
 
           
             builder.Services.AddLamar(new AppDepandacyfile());
-            // builder.Services.AddScoped<IFileService>();
-            // Inside ConfigureServices method in Startup.cs
+           
             builder.Services.AddScoped<IFileService, FileService>();
+            builder.Services.AddScoped<ITimingServices, TimingServices>();
+
 
             var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(connectionString));
 
-builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+            builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
             builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()

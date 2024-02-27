@@ -6,5 +6,7 @@ namespace DoctorAppointmentManagement.Data
     {
         public string?  Name { get; set; }
         public String? ProfilePicture { get; set; }
+
+        public int DoctorId {  get; set; }
     }
 }

@@ -6,8 +6,8 @@ namespace DoctorAppointmentManagement.Contracts
 {
     public class Doctor
     {
+        public object TimingSlots;
 
-        
         public int Id { get; set; }
 
         [Required]
@@ -29,6 +29,9 @@ namespace DoctorAppointmentManagement.Contracts
         public IFormFile ProfilePictureFile { get; set; }
 
         public string ProfilePicture { get; set; }
+
+      
+        public IEnumerable<TimingSlots> timingSlots { get; set; }
 
     }
 }
