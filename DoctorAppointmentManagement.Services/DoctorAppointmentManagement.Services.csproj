@@ -19,6 +19,7 @@
 		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.2" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.2" />
 		<PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.1" />
+		<PackageReference Include="Serilog.Extensions.Logging" Version="8.0.1-dev-10377" />
 	</ItemGroup>
 	<ItemGroup>
 	  <ProjectReference Include="..\DoctorAppointmentManagement.Data\DoctorAppointmentManagement.Data.csproj" />

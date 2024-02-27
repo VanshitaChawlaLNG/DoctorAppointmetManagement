@@ -19,6 +19,8 @@ namespace DoctorAppointmentManagement.Data
         public DbSet<Doctor> Doctors { get; set; }
         public DbSet<TimingSlots> TimingSlots { get; set; }
         public DbSet<AvailableTiming> AvailableTimings { get; set; }
+
+        public DbSet<Appointment> Appointments { get; set; }
         public IFormFile ImageFile { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

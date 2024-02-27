@@ -12,11 +12,11 @@ namespace DoctorAppointmentManagement.Controllers
     [Authorize(Roles = "Doctors")]
     public class DoctorController : Controller
     {
-        private readonly ITimingServices _timingServices;
+        private readonly ITimingService _timingServices;
         private readonly ApplicationDbContext _db;
         private readonly UserManager<ApplicationUser> _userManager;  
 
-        public DoctorController(ITimingServices timingServices, ApplicationDbContext db, UserManager<ApplicationUser> userManager)
+        public DoctorController(ITimingService timingServices, ApplicationDbContext db, UserManager<ApplicationUser> userManager)
         {
             _timingServices = timingServices;
             _db = db;

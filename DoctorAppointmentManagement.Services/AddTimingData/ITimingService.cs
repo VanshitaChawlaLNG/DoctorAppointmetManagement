@@ -6,7 +6,7 @@ using System.Security.Claims;
 
 namespace DoctorAppointmentManagement.Services.AddTimingData
 {
-    public interface ITimingServices
+    public interface ITimingService
     {
         public Task<IActionResult> AddAvailableTimings(AvailableTiming availableTiming, ApplicationUser user);
     }

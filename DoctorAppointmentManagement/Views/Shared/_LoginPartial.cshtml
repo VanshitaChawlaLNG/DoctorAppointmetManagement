@@ -3,7 +3,7 @@
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
 
-@* <ul class="navbar-nav"> *@
+
 @if (SignInManager.IsSignedIn(User))
 {
     <li class="nav-item">
@@ -16,7 +16,7 @@
     </li>
 }
 <script>
-    // Redirect to the login page if the user is not signed in
+    
     if (!@SignInManager.IsSignedIn(User)) {
         window.location.href = "/Identity/Account/Login";
     }

@@ -7,12 +7,12 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DoctorAppointmentManagement.Services.AddTimingData
 {
-    public class TimingServices : ITimingServices
+    public class TimingService : ITimingService
     {
         private readonly ApplicationDbContext _db;
         private readonly UserManager<ApplicationUser> _userManager;
 
-        public TimingServices(ApplicationDbContext db, UserManager<ApplicationUser> userManager)
+        public TimingService(ApplicationDbContext db, UserManager<ApplicationUser> userManager)
         {
             _db = db;
             _userManager = userManager;
@@ -36,7 +36,7 @@ namespace DoctorAppointmentManagement.Services.AddTimingData
                                              && at.EndTimeHours == availableTiming.EndTimeHours
                                              && at.EndTimeMins == availableTiming.EndTimeMins))
                 {
-                    // Handle the case where the time period already exists
+
                     return new BadRequestObjectResult("The specified time period already exists for the doctor on that date.");
                 }
 
@@ -54,24 +54,20 @@ namespace DoctorAppointmentManagement.Services.AddTimingData
                 TimeSpan endTime = new TimeSpan(availableTiming.EndTimeHours, availableTiming.EndTimeMins, 0);
                 TimeSpan slotDuration = TimeSpan.FromMinutes(30);
 
-               
-                    for (var i = startTime; i < endTime; i = i.Add(slotDuration))
+
+                for (var i = startTime; i < endTime; i = i.Add(slotDuration))
+                {
+                    TimeSlot timeSlot = new TimeSlot
                     {
-                        TimeSlot timeSlot = new TimeSlot
-                        {
-                            StartTime = i,
-                            EndTime = i.Add(slotDuration),
-                            TimingSlotsId = timingSlots.Id
-                        };
+                        StartTime = i,
+                        EndTime = i.Add(slotDuration),
+                        TimingSlotsId = timingSlots.Id
+                    };
 
-                        timingSlots.Slots.Add(timeSlot);
-                    }
+                    timingSlots.Slots.Add(timeSlot);
+                }
 
 
-                   
-                
-
-                
                 _db.TimingSlots.Add(timingSlots);
                 await _db.SaveChangesAsync();
 
@@ -79,7 +75,7 @@ namespace DoctorAppointmentManagement.Services.AddTimingData
             }
             catch (DbUpdateException ex)
             {
-                // Handle specific database update exception
+
                 Console.WriteLine($"Database update error: {ex.Message}");
                 return new StatusCodeResult(500);
             }

@@ -18,35 +18,58 @@
                                         <form method="post" asp-action="AddTimingpost" class="p-4">
 
                                             <div asp-validation-summary="All" class="text-danger"></div>
-                                            
+
 
                                             <div class="mb-3">
-                                                <label asp-for="StartTimeHours" class="form-label">Start Time in hours</label>
-                                                <input asp-for="StartTimeHours" type="number" class="form-control" />
+                                                <label asp-for="StartTimeHours" class="form-label">Start Time in Hours</label>
+                                                <select asp-for="StartTimeHours" class="form-select">
+                                                    @for (int i = 0; i < 24; i++)
+                                                    {
+                                                        <option value="@i">@i</option>
+                                                    }
+                                                </select>
                                                 <span asp-validation-for="StartTimeHours" class="text-danger"></span>
                                             </div>
 
                                             <div class="mb-3">
                                                 <label asp-for="StartTimeMins" class="form-label">Start Time in Minutes</label>
-                                                <input asp-for="StartTimeMins" type="number" class="form-control" />
+                                                <select asp-for="StartTimeMins" class="form-select">
+                                                    @for (int i = 0; i < 60; i += 5)
+                                                    {
+                                                        <option value="@i">@i</option>
+                                                    }
+                                                </select>
                                                 <span asp-validation-for="StartTimeMins" class="text-danger"></span>
                                             </div>
 
                                             <div class="mb-3">
                                                 <label asp-for="EndTimeHours" class="form-label">End Time In Hours</label>
-                                                <input asp-for="EndTimeHours" type="number" class="form-control" />
+                                                <select asp-for="EndTimeHours" class="form-select">
+                                                    @for (int i = 0; i < 24; i++)
+                                                    {
+                                                        <option value="@i">@i</option>
+                                                    }
+                                                </select>
                                                 <span asp-validation-for="EndTimeHours" class="text-danger"></span>
                                             </div>
+
                                             <div class="mb-3">
                                                 <label asp-for="EndTimeMins" class="form-label">End Time In Minutes</label>
-                                                <input asp-for="EndTimeMins" type="number" class="form-control" />
+                                                <select asp-for="EndTimeMins" class="form-select">
+                                                    @for (int i = 0; i < 60; i += 5)
+                                                    {
+                                                        <option value="@i">@i</option>
+                                                    }
+                                                </select>
                                                 <span asp-validation-for="EndTimeMins" class="text-danger"></span>
                                             </div>
+
                                             <div class="mb-3">
                                                 <label asp-for="Date" class="form-label">Date</label>
-                                                <input asp-for="Date" type="datetime-local" class="form-control" />
+                                                <input asp-for="Date" type="datetime-local" class="form-control" min="@DateTime.Now.ToString("yyyy-MM-ddTHH:mm")" step="1" />
                                                 <span asp-validation-for="Date" class="text-danger"></span>
                                             </div>
+
                                             <div class="d-grid gap-2">
                                                 <button type="submit" class="btn btn-primary" style="background-color: #007bff; color: #ffffff; padding:10px;border-radius:4px;">Create</button>
                                                 <!-- <a asp-controller="Admin" asp-action="IndexDoctor" class="btn btn-secondary">Back to List</a> -->

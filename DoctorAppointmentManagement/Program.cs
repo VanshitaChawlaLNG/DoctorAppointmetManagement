@@ -2,10 +2,13 @@ using DoctorAppointmentManagement.AppDependancy;
 using DoctorAppointmentManagement.Data;
 using DoctorAppointmentManagement.Services;
 using DoctorAppointmentManagement.Services.AddTimingData;
+
+using DoctorAppointmentManagement.Services.AppointmentServices;
 using Lamar.Microsoft.DependencyInjection;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Serilog;
+
 
 namespace DoctorAppointmentManagement
 {
@@ -15,11 +18,18 @@ namespace DoctorAppointmentManagement
         {
             var builder = WebApplication.CreateBuilder(args);
 
-          
             builder.Services.AddLamar(new AppDepandacyfile());
-           
-            builder.Services.AddScoped<IFileService, FileService>();
-            builder.Services.AddScoped<ITimingServices, TimingServices>();
+
+            Log.Logger = new LoggerConfiguration()
+            .MinimumLevel.Information()
+            .WriteTo.File("Log/log.txt", rollingInterval: RollingInterval.Day)
+             .CreateLogger();
+            builder.Logging.AddSerilog();
+
+            // builder.Services.AddScoped<IFileService, FileService>();
+            builder.Services.AddScoped<ITimingService, TimingService>();
+            builder.Services.AddScoped<IAppointmentService, AppointmentService>();
+
 
 
             var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
@@ -31,13 +41,15 @@ namespace DoctorAppointmentManagement
             builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultUI()
-                
                 .AddDefaultTokenProviders();
+
             builder.Services.AddControllersWithViews();
-          
+
             var app = builder.Build();
 
-           
+
+
+
             if (app.Environment.IsDevelopment())
             {
                 app.UseMigrationsEndPoint();

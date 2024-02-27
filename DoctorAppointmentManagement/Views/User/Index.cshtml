@@ -23,7 +23,15 @@
                     <p>Description: @doctor.Description</p>
                     <p>Fees: @doctor.Fees</p>
 
-                    <button class="btn-close-white" asp-controller="User" asp-action="AppointmentAdd()">Appoint</button>
+                    <button class="btn-close-white" onclick="appointDoctor(@doctor.Id)">Appoint</button>
+
+                    <script>
+                        function appointDoctor(doctorId) {
+                            // Construct the URL with the doctorId and navigate to the Appointment action
+                            var url = `/User/Appointment?DoctorId=${doctorId}`;
+                            window.location.href = url;
+                        }
+                    </script>
                 </div>
             </div>
         }
