@@ -15,21 +15,7 @@ namespace DoctorAppointmentManagement.Controllers
         }
         public IActionResult Index()
         {
-            if (User.IsInRole("Admin"))
-            {
-                // Redirect to AdminController's Index action
-                return RedirectToAction("Index", "Admin");
-            }
-            else if (User.IsInRole("Doctor"))
-            {
-                // Redirect to DoctorsController's Index action
-                return RedirectToAction("Index", "Doctor");
-            }
-            else
-            {
-                return RedirectToAction("Index", "User");
-
-            }
+            return View();
 
         }
 

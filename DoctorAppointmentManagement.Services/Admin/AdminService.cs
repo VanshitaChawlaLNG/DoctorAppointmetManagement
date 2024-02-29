@@ -103,27 +103,63 @@ namespace DoctorAppointmentManagement.Services.Admin
 
         }
 
-        public async Task<bool> DeleteDoctorServices(Doctor doctor)
+        public async Task<bool> HasAppointmentsAsync(int doctorId)
         {
-            var userDetails = await _db.Doctors.FindAsync(doctor.Id);
-
-            if (userDetails != null)
-            {
-                _db.Doctors.Remove(userDetails);
-
-                
-                var deleteResult = await _db.SaveChangesAsync();
-
-                return deleteResult > 0;
-            }
-            else
-            {
-                
-                return true;
-            }
+            return await _db.Appointments.AnyAsync(a => a.DoctorId == doctorId);
         }
 
-        public async Task<ApplicationUser> FetchUserById(string id)
+        public async Task<Doctor> GetDoctorByIdAsync(int doctorId)
+        {
+            return await _db.Doctors.FindAsync(doctorId);
+        }
+
+        public async Task<bool> DeleteDoctorAndRelatedEntitiesAsync(int doctorId)
+        {
+            using (var transaction = await _db.Database.BeginTransactionAsync())
+            {
+                try
+                {
+                    // Check if there are appointments associated with the doctor
+                    if (await HasAppointmentsAsync(doctorId))
+                    {
+                        return false; // Unable to delete, appointments exist
+                    }
+
+                    // Delete doctor's timing slots and slots
+                    var timingSlots = await _db.TimingSlots
+                        .Where(ts => ts.DoctorId == doctorId)
+                        .ToListAsync();
+
+                    foreach (var timingSlot in timingSlots)
+                    {
+                        var slots = await _db.Slots
+                            .Where(s => s.TimingSlotsId == timingSlot.Id)
+                            .ToListAsync();
+
+                        _db.Slots.RemoveRange(slots);
+                    }
+
+                    _db.TimingSlots.RemoveRange(timingSlots);
+
+                    // Delete doctor
+                    var doctor = await _db.Doctors.FindAsync(doctorId);
+                    _db.Doctors.Remove(doctor);
+
+                    await _db.SaveChangesAsync();
+                    transaction.Commit();
+
+                    return true;
+                }
+                catch (Exception)
+                {
+                    transaction.Rollback();
+                    return false;
+                }
+            
+        }
+    }
+
+    public async Task<ApplicationUser> FetchUserById(string id)
         {
             var user = await _userManager.FindByIdAsync(id);
 

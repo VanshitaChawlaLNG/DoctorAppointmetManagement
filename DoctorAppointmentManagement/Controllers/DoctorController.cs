@@ -81,6 +81,30 @@ namespace DoctorAppointmentManagement.Controllers
             }
         }
 
+
+        public async Task<IActionResult> ShowAppointsToDoctor()
+        {
+            try
+            {
+                var doctorUser = await _userManager.GetUserAsync(User);
+
+                if (doctorUser != null)
+                {
+                    var doctorAppointments = await _timingServices.ShowBookinkToDoctor(doctorUser);
+                    return View(doctorAppointments);
+                }
+                TempData["ErrorMessage"] = "Can't Fetch Doctor";
+
+                return RedirectToAction("Index","Home");
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = "Exception";
+               
+                return RedirectToAction("Index","Home");
+            }
+        }
+
     }
 }
 

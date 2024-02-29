@@ -7,6 +7,7 @@ namespace DoctorAppointmentManagement.Services.AppointmentServices
 {
     public interface IAppointmentService
     {
-        public Task<bool> DoctorAppointment(Appointment appointment,ApplicationUser user);
+        public Task<bool> DoctorAppointment(Contracts.Appointment appointment,ApplicationUser user);
     }
 }
+

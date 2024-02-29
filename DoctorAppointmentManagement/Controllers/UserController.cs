@@ -46,13 +46,13 @@ namespace DoctorAppointmentManagement.Controllers
                 }
 
                 TempData["ErrorMessage"] = "No timing slots available for the selected doctor.";
-                return View("Error");
+                return View();
             }
             catch (Exception ex)
             {
                
                 TempData["ErrorMessage"] = "Failed to fetch timing slots. Please try again later.";
-                return View("Error");
+                return View();
             }
         }
 

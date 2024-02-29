@@ -9,5 +9,6 @@ namespace DoctorAppointmentManagement.Services.AddTimingData
     public interface ITiming
     {
         public Task<IActionResult> AddAvailableTimings(AvailableTiming availableTiming, ApplicationUser user);
+        public Task<IEnumerable<Appointment>> ShowBookinkToDoctor(ApplicationUser doctorUser);
     }
 }

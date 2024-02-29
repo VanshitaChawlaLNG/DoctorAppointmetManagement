@@ -107,93 +107,66 @@ namespace DoctorAppointmentManagement.Controllers
             }
         }
 
-		
 
-		public async Task<IActionResult> DeleteDoctor(int DoctorId)
+
+        public async Task<IActionResult> DeleteDoctor(int Id)
+        {
+            var doctor = await _adminService.GetDoctorByIdAsync(Id);
+
+            if (doctor == null)
+            {
+                TempData["ErrorMessage"] = "Unable to fetch data";
+                return NotFound(); 
+            }
+
+            return View(doctor);
+        }
+
+        // POST: Doctor/Delete/5
+        [HttpPost, ActionName("DeleteDoctor")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int Id)
+        {
+            var success = await _adminService.DeleteDoctorAndRelatedEntitiesAsync(Id);
+
+            if (success)
+            {
+                TempData["SuccessMessage"] = "Doctor Deleted";
+                return RedirectToAction("IndexDoctor", "Admin"); 
+            }
+
+            TempData["ErrorMessage"] = "Unable to delete. Appointments exist.";
+            return RedirectToAction("IndexDoctor", "Admin"); 
+        }
+
+
+        public async Task<IActionResult> EditDoctor(int Id)
         {
             try
             {
-                if (DoctorId == 0 || DoctorId == null)
+                if (Id <= 0)
                 {
-                    return NotFound();
+                    TempData["ErrorMessage"] = "Invalid Doctor Id";
+                    return RedirectToAction("IndexDoctor");  // Redirect to the doctor list or another appropriate action
                 }
-                var userDetails = _adminService.FetchDoctorById(DoctorId);
+
+                var userDetails = await _adminService.FetchDoctorById(Id);
+
                 if (userDetails == null)
                 {
-                    return NotFound();
+                    return NotFound();  // Return a 404 Not Found result if the doctor is not found
                 }
+
                 return View(userDetails);
-            }
-            catch(Exception ex)
-            {
-                Console.WriteLine(ex.ToString() );
-                TempData["ErrorMessage"] = "Model State Invalid";
-                return View();
-
-            }
-        }
-       
-        [HttpPost]
-        [AutoValidateAntiforgeryToken]
-        public async Task<IActionResult> DeleteDoctorAsync(Doctor obj)
-        {
-            try
-            {
-                if (obj != null)
-                {
-
-                    ModelState.Clear();
-
-                    if (ModelState.IsValid)
-                    {
-                        var deleteResult = await _adminService.DeleteDoctorServices(obj);
-
-                        if (deleteResult)
-                        {
-                            TempData["SuccessMessage"] = "Doctor Deleted";
-                            return RedirectToAction(nameof(IndexDoctor));
-                        }
-                        else
-                        {
-                            // Handle the case where deleteResult is false
-                            TempData["ErrorMessage"] = "Failed to delete the doctor.";
-                            return View();
-                        }
-                    }
-
-                    TempData["ErrorMessage"] = "Invalid input or doctor not found.";
-                    return View();
-                }
-                TempData["ErrorMessage"] = "Invalid input .";
-                return View();
             }
             catch (Exception ex)
             {
-               
-                TempData["ErrorMessage"] = "An error occurred while processing your request.";
-                Console.WriteLine($"Exception in DeleteDoctorAsync: {ex.Message}");
-                return View();
+                TempData["ErrorMessage"] = "An error occurred while fetching doctor details.";
+                // Log the exception if needed
+                return RedirectToAction("IndexDoctor");  // Redirect to the doctor list or another appropriate action
             }
-
-           
         }
 
-
-        public async Task<IActionResult> EditDoctor(int Doctorid)
-        {
-            if (Doctorid == null || Doctorid == 0)
-            {
-                TempData["ErrorMessage"] = "Id is Null";
-                return View();
-            }
-            var userDetails = _adminService.FetchDoctorById(Doctorid);
-            if (userDetails == null)
-            {
-                TempData["ErrorMessage"] = "User is Null";
-                return View();
-            }
-            return View(userDetails);
-        }
 
         [HttpPost]
         [AutoValidateAntiforgeryToken]

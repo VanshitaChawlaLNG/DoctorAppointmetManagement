@@ -29,12 +29,19 @@
                         <ul class="navbar-nav ms-auto">
                             @if (User.IsInRole("Patient"))
                             {
+                                
                                 <li class="nav-item">
                                     <a class="nav-link mx-2 active" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link mx-2 active" asp-area="" asp-controller="User" asp-action="Index">Doctors</a>
                                 </li>
                             }
                             @if (User.IsInRole("Admin"))
                             {
+                                <li class="nav-item">
+                                    <a class="nav-link mx-2 active" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                                </li>
                                 <li class="nav-item">
                                     <a class="nav-link mx-2 active" asp-area="" asp-controller="Admin" asp-action="IndexDoctor">Admin Action</a>
                                 </li>
@@ -42,24 +49,32 @@
                             @if (User.IsInRole("Doctors"))
                             {
                                 <li class="nav-item">
-                                    <a class="nav-link mx-2 active" asp-area="" asp-controller="Doctor" asp-action="">Show Appointments</a>
+                                    <a class="nav-link mx-2 active" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link mx-2 active" asp-area="" asp-controller="Doctor" asp-action="ShowAppointsToDoctor">Show Appointments</a>
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link mx-2 active" asp-area="" asp-controller="Doctor" asp-action="AddTiming">Add Timing</a>
                                 </li>
                             }
-                        </ul>
-                        <ul class="navbar-nav ms-auto">
                             <partial name="_LoginPartial" />
                         </ul>
                     }
-                    <partial name="_NotifyPartial" />
+                    else
+                    {
+                        <partial name="_LoginPartial" />
+                    }
+
+                    
+                    
                 </div>
             </div>
         </nav>
     </header>
 
     <div class="container">
+        <partial name="_NotifyPartial" />
         <main role="main" class="pb-3">
             @RenderBody()
         </main>

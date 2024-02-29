@@ -17,64 +17,74 @@ namespace DoctorAppointmentManagement.Services
         {
             _db = db;
         }
-        public async Task<bool> DoctorAppointment(Appointment appointment, ApplicationUser user)
+        public async Task<bool> DoctorAppointment(Contracts.Appointment appointment, ApplicationUser user)
         {
-            appointment.PatientId = user.Id;
-
-            _db.Appointments.Add(appointment);
-            var result = await _db.SaveChangesAsync();
-
-            if (result == 0)
+            try
             {
-                // Log or handle the issue with saving appointment
-                return false;
-            }
+                appointment.PatientId = user.Id;
 
-            if (!TryParseTimestamp(appointment.Timestamp, out var date, out var startTime, out var endTime))
-            {
-                // Log or handle the issue with timestamp parsing
-                return false;
-            }
+                _db.Appointments.Add(appointment);
+                var result = await _db.SaveChangesAsync();
 
-            /* var timingSlotToRemove = await _db.TimingSlots
-      .Include(ts => ts.Slots)
-      .Where(ts =>
-          ts.DoctorId == appointment.DoctorId &&
-          ts.Date == date &&
-          ts.Slots.Any(timeSlot =>
-              timeSlot.StartTime == startTime &&
-              timeSlot.EndTime == endTime))
-      .FirstOrDefaultAsync(ts =>
-          ts.DoctorId == appointment.DoctorId &&
-          ts.Date == date &&
-          ts.Slots.Any(timeSlot =>
-              timeSlot.StartTime == startTime &&
-              timeSlot.EndTime == endTime));*/
-           /* var timeSlotsToDelete = await _db.TimingSlots.Include
-     .Where(timeSlot =>
-         timeSlot.TimingSlots.DoctorId == appointment.DoctorId &&
-         timeSlot.StartTime == startTime &&
-         timeSlot.EndTime == endTime)
-     .ToListAsync();
-            if (timingSlotToRemove != null)
-            {
-                _db.TimingSlots.Remove(timingSlotToRemove);
-                var timingResult = await _db.SaveChangesAsync();
-
-                if (timingResult == 0)
+                if (result == 0)
                 {
-                    // Log or handle the issue with removing timing slot
+                    // Log or handle the issue with saving the appointment
                     return false;
                 }
-            }
-            else
-            {
-                // Log or handle the case where no timing slot is found
-                return false;
-            }*/
 
-            return true;
+                if (!TryParseTimestamp(appointment.Timestamp, out var date, out var startTime, out var endTime))
+                {
+                    // Log or handle the issue with timestamp parsing
+                    return false;
+                }
+
+                // Fetch TimingSlotsId using DoctorId
+                var timingSlotsId = await _db.TimingSlots
+                    .Where(ts => ts.DoctorId == appointment.DoctorId && ts.Date == date)
+                    .Select(ts => ts.Id)
+                    .FirstOrDefaultAsync();
+
+                if (timingSlotsId != 0)
+                {
+                 
+                    var slotsToDelete = await _db.Slots
+                        .Where(slot =>
+                            slot.TimingSlotsId == timingSlotsId &&
+                            slot.StartTime == startTime &&
+                            slot.EndTime == endTime)
+                        .ToListAsync();
+
+                    // Remove Slots
+                    _db.Slots.RemoveRange(slotsToDelete);
+
+                    // Remove TimingSlots
+                    var timingSlotToRemove = await _db.TimingSlots.FindAsync(timingSlotsId);
+                    _db.TimingSlots.Remove(timingSlotToRemove);
+
+                    // Save changes
+                    var saveResult = await _db.SaveChangesAsync();
+
+                    if (saveResult == 0)
+                    {
+                       
+                        return false;
+                    }
+                }
+                else
+                {
+                   
+                    return false;
+                }
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                // Log the exception
+                return false;
+            }
         }
+
 
         private bool TryParseTimestamp(string timestamp, out DateTime date, out TimeSpan startTime, out TimeSpan endTime)
         {

@@ -89,6 +89,16 @@ namespace DoctorAppointmentManagement.Services.AddTimingData
                 return new StatusCodeResult(500);
             }
         }
+        public async Task<IEnumerable<Appointment>> ShowBookinkToDoctor(ApplicationUser doctorUser)
+        {
+            var doctorAppointments = await _db.Appointments
+                .Where(a => a.DoctorId == doctorUser.DoctorId)
+                .ToListAsync();
+
+            // You can now pass 'doctorAppointments' to the view or perform any other actions
+
+            return doctorAppointments;
+        }
 
     }
 }

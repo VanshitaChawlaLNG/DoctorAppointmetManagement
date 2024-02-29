@@ -15,10 +15,16 @@ namespace DoctorAppointmentManagement.Services.Admin
 
         public Task<bool> UpdateDoctorServices(Doctor doctor);
 
-        public Task<bool> DeleteDoctorServices(Doctor doctor);
+        
         public Task<ApplicationUser> FetchUserById(string id);
 
         
         public Task<IEnumerable> ShowAppointmentsAdded();
+
+        public Task<bool> HasAppointmentsAsync(int doctorId);
+        
+        public Task<Doctor> GetDoctorByIdAsync(int doctorId);
+        
+        public Task<bool> DeleteDoctorAndRelatedEntitiesAsync(int doctorId);
     }
 }

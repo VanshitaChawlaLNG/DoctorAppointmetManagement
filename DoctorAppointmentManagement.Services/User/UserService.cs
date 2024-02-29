@@ -86,11 +86,32 @@ namespace DoctorAppointmentManagement.Services.User
 
         public  IEnumerable<Appointment> fetchAppointments(ApplicationUser user)
         {
-            var appointments = _db.Appointments
-                       .Where(a => a.PatientId == user.Id)
-                       .ToList();
-            return appointments;
-        }
+           
+            
+                var appointments = _db.Appointments
+                    .Where(a => a.PatientId == user.Id)
+                    .ToList();
+
+                string doctorName = "Unknown Doctor";
+
+                foreach (var appointment in appointments)
+                {
+                    var doctor = _db.Doctors
+                                    .Where(d => d.Id == appointment.DoctorId)
+                                    .FirstOrDefault();
+
+                    if (doctor != null)
+                    {
+                        doctorName = doctor.Name;
+                        break; 
+                    }
+                }
+
+                
+                return appointments;
+            }
+
         
+
     }
 }

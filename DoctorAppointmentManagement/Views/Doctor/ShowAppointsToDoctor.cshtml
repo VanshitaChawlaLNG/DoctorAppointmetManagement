@@ -1,0 +1,52 @@
+﻿@{
+    ViewData["Title"] = "ShowBooking";
+}
+
+@model IEnumerable<DoctorAppointmentManagement.Contracts.Appointment>
+
+<section>
+    <div class="form-body">
+        <div class="row">
+            <div class="form-holder">
+                <div class="form-content">
+                    <div class="form-items" style="background: #DBE2EF;">
+                        <h3>Your Appointments</h3>
+                        <p>Fill in the data below.</p>
+
+                        @if (Model.Any())
+                        {
+                            <div class="table-responsive">
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>@Html.DisplayNameFor(model => model.Id)</th>
+                                            <th>@Html.DisplayNameFor(model => model.PatientId)</th>
+                                            <th>@Html.DisplayNameFor(model => model.PatientName)</th>
+                                            <th>@Html.DisplayNameFor(model => model.Timestamp)</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var appointments in Model)
+                                        {
+                                            <tr>
+                                                <td>@Html.DisplayFor(model => appointments.Id)</td>
+                                                <td>@Html.DisplayFor(model => appointments.PatientId)</td>
+                                                <td>@Html.DisplayFor(model => appointments.PatientName)</td>
+                                                <td>@Html.DisplayFor(model => appointments.Timestamp)</td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        }
+                        else
+                        {
+                            <p>No appointments available.</p>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+

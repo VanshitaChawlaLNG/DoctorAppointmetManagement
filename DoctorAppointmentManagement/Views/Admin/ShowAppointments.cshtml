@@ -20,6 +20,7 @@
                         <th>@Html.DisplayNameFor(model => model.PatientId)</th>
                         <th>@Html.DisplayNameFor(model => model.PatientName)</th>
                         <th>@Html.DisplayNameFor(model => model.Timestamp)</th>
+                        <th>@Html.DisplayNameFor(model => model.DoctorId)</th>
                       
                     </tr>
                 </thead>
@@ -31,6 +32,7 @@
                             <td>@Html.DisplayFor(model => appointments.PatientId)</td>
                             <td>@Html.DisplayFor(model => appointments.PatientName)</td>
                             <td>@Html.DisplayFor(model => appointments.Timestamp)</td>
+                            <td>@Html.DisplayFor(model => appointments.DoctorId)</td>
                             
                             <td>
                                @*  <div class="btn-group" role="group">
