@@ -12,14 +12,14 @@ namespace DoctorAppointmentManagement.Controllers
     [Authorize(Roles = "Doctors")]
     public class DoctorController : Controller
     {
-        private readonly ITimingService _timingServices;
-        private readonly ApplicationDbContext _db;
+        private readonly ITiming _timingServices;
+       
         private readonly UserManager<ApplicationUser> _userManager;  
 
-        public DoctorController(ITimingService timingServices, ApplicationDbContext db, UserManager<ApplicationUser> userManager)
+        public DoctorController(ITiming timingServices, UserManager<ApplicationUser> userManager)
         {
             _timingServices = timingServices;
-            _db = db;
+           
             _userManager = userManager;  
         }
 
@@ -49,7 +49,7 @@ namespace DoctorAppointmentManagement.Controllers
                     if (user == null)
                     {
                         TempData["ErrorMessage"] = "Failed to Fetch User. Please try again later.";
-                        return RedirectToAction("Error");
+                        return View();
                     }
 
                     var timingResult = await _timingServices.AddAvailableTimings(availableTiming, user);
@@ -57,11 +57,11 @@ namespace DoctorAppointmentManagement.Controllers
                     if (timingResult is OkResult)
                     {
                         TempData["SuccessMessage"] = "Timing added successfully.";
-                        return RedirectToAction("IndexDoctor");
+                        return RedirectToAction("AddTiming");
                     }
 
                     TempData["ErrorMessage"] = "Failed to add timing. Please try again later.";
-                    return RedirectToAction("Error");
+                    return View();
                 }
 
             
@@ -71,13 +71,13 @@ namespace DoctorAppointmentManagement.Controllers
                     .ToList();
 
                 TempData["ErrorMessage"] = $"Invalid model state. Please check your input. Errors: {string.Join(", ", errorMessages)}";
-                return RedirectToAction("Error");
+                return View();
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"An error occurred: {ex.Message}");
                 TempData["ErrorMessage"] = "An unexpected error occurred. Please contact support.";
-                return RedirectToAction("Error");
+                return View();
             }
         }
 

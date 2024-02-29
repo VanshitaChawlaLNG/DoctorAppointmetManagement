@@ -1,19 +1,12 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Identity;
-using DoctorAppointmentManagement.Models;
 using DoctorAppointmentManagement.Contracts;
 using Microsoft.AspNetCore.Http;
 
 namespace DoctorAppointmentManagement.Data
 {
-    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
+    public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : IdentityDbContext<ApplicationUser>(options)
     {
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
-            : base(options)
-        {
-        }
-
         public DbSet<ApplicationUser> ApplicationUser { get; set; }
 
         public DbSet<Doctor> Doctors { get; set; }
@@ -21,6 +14,7 @@ namespace DoctorAppointmentManagement.Data
         public DbSet<AvailableTiming> AvailableTimings { get; set; }
 
         public DbSet<Appointment> Appointments { get; set; }
+        public DbSet<Slots> Slots { get; set; }
         public IFormFile ImageFile { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -35,11 +29,11 @@ namespace DoctorAppointmentManagement.Data
                 .WithMany(d => d.timingSlots)
                 .HasForeignKey(t => t.DoctorId)
                 .OnDelete(DeleteBehavior.Cascade);
-            modelBuilder.Entity<TimeSlot>()
+           /* modelBuilder.Entity<Slots>()
               .HasOne(ts => ts.TimingSlots)
               .WithMany(ts => ts.Slots)
               .HasForeignKey(ts => ts.TimingSlotsId)
-              .OnDelete(DeleteBehavior.Cascade);
+              .OnDelete(DeleteBehavior.Cascade);*/
 
         }
     }

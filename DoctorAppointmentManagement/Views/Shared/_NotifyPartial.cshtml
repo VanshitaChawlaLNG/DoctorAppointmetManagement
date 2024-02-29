@@ -1,0 +1,45 @@
+﻿<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+
+@if (!string.IsNullOrEmpty(TempData["ErrorMessage"] as string) || !string.IsNullOrEmpty(TempData["SuccessMessage"] as string))
+{
+    <script>
+        $(document).ready(function () {
+            // Initialize Toastr options
+            toastr.options = {
+                closeButton: true,
+                progressBar: true,
+                positionClass: 'toast-top-right',
+                timeOut: 8000 // Set to 0 to prevent auto-hide
+            };
+
+            // Show Toastr notification for error with red background
+            var errorMessage = '@TempData["ErrorMessage"]';
+            if (errorMessage) {
+                toastr.error(errorMessage, 'Error', {
+                    "progressBar": true,
+                    "timeOut": "8000",
+                    "extendedTimeOut": "2000",
+                    "showDuration": "300",
+                    "hideDuration": "1000",
+                    "positionClass": "toast-top-right",
+                    "backgroundColor": "#FF0000" // Red background color
+                });
+            }
+
+            // Show Toastr notification for success with green background
+            var successMessage = '@TempData["SuccessMessage"]';
+            if (successMessage) {
+                toastr.success(successMessage, 'Success', {
+                    "progressBar": true,
+                    "timeOut": "8000",
+                    "extendedTimeOut": "2000",
+                    "showDuration": "300",
+                    "hideDuration": "1000",
+                    "positionClass": "toast-top-right",
+                    "backgroundColor": "#00FF00" // Green background color
+                });
+            }
+        });
+    </script>
+}

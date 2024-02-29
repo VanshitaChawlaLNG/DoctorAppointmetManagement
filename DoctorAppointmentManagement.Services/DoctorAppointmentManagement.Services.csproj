@@ -24,8 +24,5 @@
 	<ItemGroup>
 	  <ProjectReference Include="..\DoctorAppointmentManagement.Data\DoctorAppointmentManagement.Data.csproj" />
 	</ItemGroup>
-	<ItemGroup>
-	  <Folder Include="Admin\" />
-	</ItemGroup>
 
 </Project>

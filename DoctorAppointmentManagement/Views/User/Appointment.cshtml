@@ -1,61 +1,48 @@
 ﻿@model DoctorAppointmentManagement.Contracts.Appointment
 
 @{
-    ViewData["Title"] = "Appoint Doctors";
+    
 }
-<section >
 
-<div class="form-body" >
-    <div class="row">
-        <div class="form-holder">
-            <div class="form-content">
-                    <div class="form-items" style="background-color:aqua">
-                    <h3>Register Today</h3>
-                    <p>Fill in the data below.</p>
-                    <form class="requires-validation" asp-action="Appointment">
-
-                        <div class="col-md-12">
-                            Doctor Name
-                            <input asp-for="PatientName" class="form-control" />
-                            <span asp-validation-for="PatientName" class="text-danger"></span>
-                        </div>
-
-
-
-                            <div>
+<section>
+    <div class="form-body">
+        <div class="row">
+            <div class="form-holder">
+                <div class="form-content">
+                    <div class="form-items" style="background-color:darkslateblue">
+                        <h3>Register Today</h3>
+                        <p>Fill in the data below.</p>
+                        <form class="requires-validation" method="post" asp-action="Appointment" asp-controller="User">
+                            <div class="col-md-12">
+                                 Name
+                                <input asp-for="PatientName" class="form-control" />
+                                <span asp-validation-for="PatientName" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
                                 <label asp-for="Timestamp">Select Timing Slot:</label>
-                                <select asp-for="Timestamp" class="form-control" id="timingSlotId" name="Timestamp">
+                                <select asp-for="Timestamp" class="form-control" name="Timestamp" asp-items="@ViewBag.TimingSlotsList">
                                     <option value="">-- Select Timing Slot --</option>
-
-                                    @foreach (var timingSlot in ViewBag.TimingSlots)
-                                    {
-                                        if (timingSlot.Slots != null)
-                                        {
-                                            foreach (var timeSlot in timingSlot.Slots)
-                                            {
-                                                var startTimeFormatted = $"{(int)timeSlot.StartTime.TotalHours:D2}:{timeSlot.StartTime.Minutes:D2}";
-                                                var endTimeFormatted = $"{(int)timeSlot.EndTime.TotalHours:D2}:{timeSlot.EndTime.Minutes:D2}";
-
-                                                var dateTimeString = $"{timingSlot.Date} {startTimeFormatted} - {endTimeFormatted}";
-
-                                                <option value="@dateTimeString">
-                                                    @dateTimeString
-                                                </option>
-                                            }
-                                        }
-                                    }
+                                   
                                 </select>
+
+
+
+
+
+                                <span asp-validation-for="Timestamp" class="text-danger"></span>
                             </div>
 
-
-
-                        <div class="form-button mt-3">
-                            <button id="submit" type="submit" class="btn btn-primary"  >Register</button>
-                        </div>
-                    </form>
+                            <!-- Add hidden inputs for Date, StartTime, and EndTime -->
+                            <input type="hidden" asp-for="DoctorId" />
+                            @* <input type="hidden" asp-for="StartTime" />
+                            <input type="hidden" asp-for="EndTime" /> *@
+                            <div class="form-button mt-3">
+                                <button id="submit" type="submit" class="btn btn-primary">Register</button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 </section>

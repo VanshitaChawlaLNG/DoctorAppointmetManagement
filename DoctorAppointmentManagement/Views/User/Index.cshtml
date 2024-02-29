@@ -6,17 +6,17 @@
 }
 
 <section>
-    <div class="card-header" style="margin-bottom: 50px;">
-        <h2>For Your Service</h2>
-    </div>
+  
+    <h2 id="header-Services">For Your Service</h2>
 
     <div id="doctors-container">
+     
         @foreach (var doctor in Model)
         {
             <div class="card-User">
                 @if (!string.IsNullOrEmpty(doctor?.ProfilePicture))
                 {
-                    <img src="@doctor.ProfilePicture" alt="Profile Picture" />
+                    <img src="@doctor.ProfilePicture" alt="Profile Picture" width="250px" />
                 }
                 <div class="container">
                     <h4><b>@doctor.Name</b></h4>

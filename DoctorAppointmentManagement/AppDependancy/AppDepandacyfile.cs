@@ -6,15 +6,12 @@ namespace DoctorAppointmentManagement.AppDependancy
     {
         public AppDepandacyfile()
         {
-            Scan(Scanner =>
+            Scan(scanner =>
             {
-                Scanner.Assembly("DoctorAppointmentManagement.Services");
-                Scanner.WithDefaultConventions();
-
-                
-                Scanner.IncludeNamespace("DoctorAppointmentManagement.Services.AppointmentServices");
-                Scanner.IncludeNamespace("DoctorAppointmentManagement.Services.AddTimingData");
-                // Add more namespaces if needed
+                scanner.TheCallingAssembly();
+                scanner.WithDefaultConventions();
+                scanner.AssembliesAndExecutablesFromApplicationBaseDirectory(assembly =>
+                   assembly.GetName().Name.StartsWith("DoctorAppointmentManagement."));
             });
         }
     }

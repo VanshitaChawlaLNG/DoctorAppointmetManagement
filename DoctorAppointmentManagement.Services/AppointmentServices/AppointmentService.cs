@@ -1,14 +1,11 @@
-﻿using DoctorAppointmentManagement.Contracts;
+﻿using Azure.Core;
+using DoctorAppointmentManagement.Contracts;
 using DoctorAppointmentManagement.Data;
 using DoctorAppointmentManagement.Services.AppointmentServices;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace DoctorAppointmentManagement.Services
 {
@@ -20,27 +17,84 @@ namespace DoctorAppointmentManagement.Services
         {
             _db = db;
         }
-        public async Task<IActionResult> DoctorAppointment(Appointment appointment, ApplicationUser user, int DoctorId)
+        public async Task<bool> DoctorAppointment(Appointment appointment, ApplicationUser user)
         {
-            try
-            {
-                appointment.DoctorId = DoctorId;
-                _db.Appointments.Add(appointment);
-                await _db.SaveChangesAsync();
+            appointment.PatientId = user.Id;
 
-                return new OkResult();
-            }
-            catch (DbUpdateException ex)
-            {
+            _db.Appointments.Add(appointment);
+            var result = await _db.SaveChangesAsync();
 
-                Console.WriteLine($"Database update error: {ex.Message}");
-                return new StatusCodeResult(500);
-            }
-            catch (Exception ex)
+            if (result == 0)
             {
-                Console.WriteLine($"An error occurred while adding available timings: {ex.Message}");
-                return new StatusCodeResult(500);
+                // Log or handle the issue with saving appointment
+                return false;
             }
+
+            if (!TryParseTimestamp(appointment.Timestamp, out var date, out var startTime, out var endTime))
+            {
+                // Log or handle the issue with timestamp parsing
+                return false;
+            }
+
+            /* var timingSlotToRemove = await _db.TimingSlots
+      .Include(ts => ts.Slots)
+      .Where(ts =>
+          ts.DoctorId == appointment.DoctorId &&
+          ts.Date == date &&
+          ts.Slots.Any(timeSlot =>
+              timeSlot.StartTime == startTime &&
+              timeSlot.EndTime == endTime))
+      .FirstOrDefaultAsync(ts =>
+          ts.DoctorId == appointment.DoctorId &&
+          ts.Date == date &&
+          ts.Slots.Any(timeSlot =>
+              timeSlot.StartTime == startTime &&
+              timeSlot.EndTime == endTime));*/
+           /* var timeSlotsToDelete = await _db.TimingSlots.Include
+     .Where(timeSlot =>
+         timeSlot.TimingSlots.DoctorId == appointment.DoctorId &&
+         timeSlot.StartTime == startTime &&
+         timeSlot.EndTime == endTime)
+     .ToListAsync();
+            if (timingSlotToRemove != null)
+            {
+                _db.TimingSlots.Remove(timingSlotToRemove);
+                var timingResult = await _db.SaveChangesAsync();
+
+                if (timingResult == 0)
+                {
+                    // Log or handle the issue with removing timing slot
+                    return false;
+                }
+            }
+            else
+            {
+                // Log or handle the case where no timing slot is found
+                return false;
+            }*/
+
+            return true;
+        }
+
+        private bool TryParseTimestamp(string timestamp, out DateTime date, out TimeSpan startTime, out TimeSpan endTime)
+        {
+            date = default;
+            startTime = default;
+            endTime = default;
+
+            // Your timestamp parsing logic here
+
+            var parts = timestamp?.Split(" ");
+            if (parts != null && parts.Length == 6 &&
+                DateTime.TryParse(parts[0], out date) &&
+                TimeSpan.TryParse(parts[3], out startTime) &&
+                TimeSpan.TryParse(parts[5], out endTime))
+            {
+                return true;
+            }
+
+            // Log or handle the issue with timestamp parsing
+            return false;
         }
 
     }

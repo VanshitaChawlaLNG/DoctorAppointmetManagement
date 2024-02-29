@@ -2,6 +2,7 @@
 using DoctorAppointmentManagement.Contracts;
 using DoctorAppointmentManagement.Contracts.Constants;
 using DoctorAppointmentManagement.Data;
+using DoctorAppointmentManagement.Services.Admin;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -13,22 +14,37 @@ namespace DoctorAppointmentManagement.Controllers
 	[Authorize(Roles = "Admin")]
     public class AdminController : Controller
     {
+        private readonly IAdminService _adminService;
         private readonly ApplicationDbContext _db;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IWebHostEnvironment _webHostEnvironment;
 
-        public AdminController(ApplicationDbContext db, UserManager<ApplicationUser> userManager ,IWebHostEnvironment webHostEnvironment)
+        public AdminController(ApplicationDbContext db, UserManager<ApplicationUser> userManager ,IWebHostEnvironment webHostEnvironment,IAdminService adminService)
         {
+            _adminService=adminService;
             _db = db;
             _userManager = userManager;
             _webHostEnvironment = webHostEnvironment;
         }
 
-        public IActionResult IndexDoctor()
+        public async Task<IActionResult> IndexDoctor()
         {
-            IEnumerable<Doctor> objCategoryList = _db.Doctors.ToList();
-            return View(objCategoryList);
+            try
+            {
+
+                var showDoctorsAdded = await _adminService.ShowDoctorsAdded();
+                //TempData["SuccessMessage"] = "Unwanted exception occur";
+                return View(showDoctorsAdded);
+                } 
+            
+            catch (Exception ex)
+            {
+                Console.WriteLine($"An Exception occurred: {ex.Message}");
+                TempData["ErrorMessage"] = "Unwanted exception occur";
+                return View();
+            }
         }
+
 
         public IActionResult CreateDoctor()
         {
@@ -38,147 +54,237 @@ namespace DoctorAppointmentManagement.Controllers
         [HttpPost]
         [AutoValidateAntiforgeryToken]
 
-        public async Task<IActionResult> CreateDoctor(Doctor obj)
+        public async Task<IActionResult> CreateDoctor(Doctor doctor)
         {
-            if (obj == null)
+            try
             {
-                ModelState.AddModelError("Name", "The Fields are Not Correct Check Again");
-                return View();
-            }
-            ModelState.Clear();
-
-            if (ModelState.IsValid)
-            {
-                if (obj.ProfilePictureFile != null && obj.ProfilePictureFile.Length > 0)
+                if (doctor == null)
                 {
-                    
-                    var fileName = Guid.NewGuid().ToString() + "_" + obj.ProfilePictureFile.FileName;
+                    TempData["ErrorMessage"] = "No Values Entered";
+                    return View();
+                }
+                ModelState.Clear();
 
-                   
-                    var filePath = Path.Combine(_webHostEnvironment.WebRootPath, "Uploads", fileName);
-
-                    using (var stream = new FileStream(filePath, FileMode.Create))
+                if (ModelState.IsValid)
+                {
+                    if (doctor.ProfilePictureFile != null && doctor.ProfilePictureFile.Length > 0)
                     {
-                        await obj.ProfilePictureFile.CopyToAsync(stream);
+
+                        var fileName = Guid.NewGuid().ToString() + "_" + doctor.ProfilePictureFile.FileName;
+
+
+                        var filePath = Path.Combine(_webHostEnvironment.WebRootPath, "Uploads", fileName);
+
+                        using (var stream = new FileStream(filePath, FileMode.Create))
+                        {
+                            await doctor.ProfilePictureFile.CopyToAsync(stream);
+                        }
+
+                        doctor.ProfilePicture = "/Uploads/" + fileName;
                     }
 
-                    obj.ProfilePicture = "/Uploads/" + fileName;
+                    bool CreateDoctorCall = await _adminService.CreateDoctorServices(doctor);
+                    if (!CreateDoctorCall)
+                    {
+                        TempData["ErrorMessage"] = "Unable To Post Details";
+                        return View();
+                    }
+                    else
+                    {
+                        TempData["SucessMessage"] = "Values Inserted";
+                       
+                        return View();
+                    }
                 }
-                
-
-                _db.Doctors.Add(obj);
-                _db.SaveChanges();
-                TempData["Success"] = "Field Inserted";
-                await _db.Doctors.SingleAsync(d => d.Id == obj.Id);
-                var user = new ApplicationUser
-                {
-                    UserName = obj.Email,
-                    Email = obj.Email,
-                    Name = obj.Name,
-                    DoctorId = obj.Id,
-                    EmailConfirmed = true,
-                    PhoneNumberConfirmed = true,
-
-                };
-                var result = await _userManager.CreateAsync(user, obj.Password);
-                if (result.Succeeded)
-                {
-                    await _userManager.AddToRoleAsync(user, Roles.Doctors.ToString());
-                }
-                return RedirectToAction("Index");
+                TempData["ErrorMessage"] = "Model State Invalid";
+                return View();
             }
-
-            return View(obj);
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                TempData["ErrorMessage"] = "Exception";
+                return View();
+            }
         }
 
-		public IActionResult IndexUser()
-		{
-			IEnumerable<ApplicationUser> objUserList = _db.Users;
-			return View(objUserList);
-		}
+		
 
-		public async Task<IActionResult> DeleteDoctor(int id)
+		public async Task<IActionResult> DeleteDoctor(int DoctorId)
         {
-            if(id == 0 || id == null)
+            try
             {
-                return NotFound();
-            } 
-            var userDetails=_db.Doctors.Find(id);
-            if(userDetails == null)
-            {
-                return NotFound();
+                if (DoctorId == 0 || DoctorId == null)
+                {
+                    return NotFound();
+                }
+                var userDetails = _adminService.FetchDoctorById(DoctorId);
+                if (userDetails == null)
+                {
+                    return NotFound();
+                }
+                return View(userDetails);
             }
-            return View(userDetails);
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex.ToString() );
+                TempData["ErrorMessage"] = "Model State Invalid";
+                return View();
+
+            }
         }
        
         [HttpPost]
         [AutoValidateAntiforgeryToken]
-        public IActionResult DeleteDoctor(Doctor obj)
+        public async Task<IActionResult> DeleteDoctorAsync(Doctor obj)
         {
-            var userDetails = _db.Doctors.Find(obj.Id);
-            if (userDetails == null) { return NotFound(); }
-            _db.Doctors.Remove(userDetails);
-            _db.SaveChanges();
-            TempData["success"] = "Doctor Deleted";
-            return RedirectToAction("IndexUser");
+            try
+            {
+                if (obj != null)
+                {
 
+                    ModelState.Clear();
+
+                    if (ModelState.IsValid)
+                    {
+                        var deleteResult = await _adminService.DeleteDoctorServices(obj);
+
+                        if (deleteResult)
+                        {
+                            TempData["SuccessMessage"] = "Doctor Deleted";
+                            return RedirectToAction(nameof(IndexDoctor));
+                        }
+                        else
+                        {
+                            // Handle the case where deleteResult is false
+                            TempData["ErrorMessage"] = "Failed to delete the doctor.";
+                            return View();
+                        }
+                    }
+
+                    TempData["ErrorMessage"] = "Invalid input or doctor not found.";
+                    return View();
+                }
+                TempData["ErrorMessage"] = "Invalid input .";
+                return View();
+            }
+            catch (Exception ex)
+            {
+               
+                TempData["ErrorMessage"] = "An error occurred while processing your request.";
+                Console.WriteLine($"Exception in DeleteDoctorAsync: {ex.Message}");
+                return View();
+            }
+
+           
         }
 
-        public async Task<IActionResult> EditDoctor(int id)
+
+        public async Task<IActionResult> EditDoctor(int Doctorid)
         {
-            if (id == null || id == 0)
+            if (Doctorid == null || Doctorid == 0)
             {
-                return NotFound();
+                TempData["ErrorMessage"] = "Id is Null";
+                return View();
             }
-            var DoctorById=_db.Doctors.Find(id);
-            if(DoctorById == null)
+            var userDetails = _adminService.FetchDoctorById(Doctorid);
+            if (userDetails == null)
             {
-                return NotFound();
+                TempData["ErrorMessage"] = "User is Null";
+                return View();
             }
-            return View(DoctorById);
+            return View(userDetails);
         }
 
         [HttpPost]
         [AutoValidateAntiforgeryToken]
 
-        public async Task<IActionResult> EditDoctor(Doctor DoctorObj)
+        public async Task<IActionResult> EditDoctor(Doctor doctorObj)
         {
-           
-            var existingDoctor = await _db.Doctors.FindAsync(DoctorObj.Id);
-
-            if (existingDoctor == null)
+            try
             {
-               
-                return NotFound();
+                // Check if ModelState is valid
+                if (!ModelState.IsValid || doctorObj == null)
+                {
+                    TempData["ErrorMessage"] = "Invalid or Missing Entries By The User";
+                    return View();
+                }
+
+                var result = await _adminService.UpdateDoctorServices(doctorObj);
+
+                if (result)
+                {
+                    TempData["SuccessMessage"] = "Doctor Updated";
+                    return View(nameof(IndexDoctor));
+                }
+
+                TempData["ErrorMessage"] = "Failed to Update Doctor. Please try again.";
+                return RedirectToAction(nameof(IndexDoctor));
             }
-
-           
-            DoctorObj.ProfilePicture = existingDoctor.ProfilePicture;
-            DoctorObj.Password = existingDoctor.Password;
-
-           
-            _db.Entry(existingDoctor).CurrentValues.SetValues(DoctorObj);
-
-            await _db.SaveChangesAsync();
-
-            return RedirectToAction("IndexDoctor");
+            catch (Exception ex)
+            {
+                Console.WriteLine($"An error occurred: {ex.Message}");
+                TempData["ErrorMessage"] = "An error occurred while processing your request.";
+                return RedirectToAction(nameof(IndexDoctor));
+            }
         }
 
-        public async Task<IActionResult> DeleteUser(string id)
+
+
+        public IActionResult IndexUser()
+        {
+            IEnumerable<ApplicationUser> objUserList = _db.Users;
+            return View(objUserList);
+        }
+
+
+        public async Task<IActionResult> ShowAppointments()
+        {
+            try
+            {
+                
+                
+                    var showAppointmentssAdded = await _adminService.ShowAppointmentsAdded();
+
+                    if (showAppointmentssAdded != null)
+                    {
+                        TempData["SuccessMessage"] = "Details";
+                        return View(showAppointmentssAdded);
+                    }
+                TempData["ErrorMessage"] = "Can't Insert Your values";
+                return View();
+                
+            }
+            catch (DbUpdateException ex)
+            {
+                Console.WriteLine(ex.Message);
+                TempData["ErrorMessage"] = "Database exception";
+                return View();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                TempData["ErrorMessage"] = "exception ,Could Not Insert Your Data";
+                return View();
+            }
+        }
+       
+
+
+       /* public async Task<IActionResult> DeleteUser(string id)
         {
             if ( id == null)
             {
                 return NotFound();
             }
-            var userDetails = _db.Users.Find(id);
+            var userDetails =_adminService.FetchUserById(id);
             if (userDetails == null)
             {
                 return NotFound();
             }
-            return View(userDetails);
+            return  View(userDetails);
         }
-
-        [HttpPost]
+*/
+        /*[HttpPost]
         [AutoValidateAntiforgeryToken]
         public IActionResult DeleteUser(ApplicationUser obj)
         {
@@ -229,7 +335,7 @@ namespace DoctorAppointmentManagement.Controllers
 
             return RedirectToAction("IndexDoctor");
         }
-
+*/
 
     }
 }

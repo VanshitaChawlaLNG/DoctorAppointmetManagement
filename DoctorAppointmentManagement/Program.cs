@@ -1,9 +1,5 @@
 using DoctorAppointmentManagement.AppDependancy;
 using DoctorAppointmentManagement.Data;
-using DoctorAppointmentManagement.Services;
-using DoctorAppointmentManagement.Services.AddTimingData;
-
-using DoctorAppointmentManagement.Services.AppointmentServices;
 using Lamar.Microsoft.DependencyInjection;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -19,6 +15,7 @@ namespace DoctorAppointmentManagement
             var builder = WebApplication.CreateBuilder(args);
 
             builder.Services.AddLamar(new AppDepandacyfile());
+            builder.Host.UseLamar();
 
             Log.Logger = new LoggerConfiguration()
             .MinimumLevel.Information()
@@ -27,8 +24,8 @@ namespace DoctorAppointmentManagement
             builder.Logging.AddSerilog();
 
             // builder.Services.AddScoped<IFileService, FileService>();
-            builder.Services.AddScoped<ITimingService, TimingService>();
-            builder.Services.AddScoped<IAppointmentService, AppointmentService>();
+           /* builder.Services.AddScoped<ITiming, Timing>();
+            builder.Services.AddScoped<IAppointment, Appointment>();*/
 
 
 

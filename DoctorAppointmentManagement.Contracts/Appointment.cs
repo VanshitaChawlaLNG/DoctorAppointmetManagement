@@ -4,9 +4,9 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DoctorAppointmentManagement.Contracts
 {
-	public class Appointment
+    public class Appointment
     {
-     
+        [Key]
         public int Id { get; set; }
 
         [Required]
@@ -16,17 +16,21 @@ namespace DoctorAppointmentManagement.Contracts
 
         public string PatientName { get; set; }
 
-        
-        public int PatientId { get; set; }
-        
-      
-       /* public Doctor Doctor { get; set; }*/
+
+        public string PatientId { get; set; }
+
+
+        /* public Doctor Doctor { get; set; }*/
 
         [Required]
-        public DateTime Timestamp { get; set; }
+        public string Timestamp { get; set; }
+        /*[Required]
+        public TimeSpan StartTime { get; set; }
+        [Required]
 
-      
-       
+        public TimeSpan EndTime { get; set; }
+
+*/
 
     }
 }

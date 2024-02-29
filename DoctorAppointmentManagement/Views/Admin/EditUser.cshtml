@@ -1,48 +1,10 @@
 ﻿@model DoctorAppointmentManagement.Data.ApplicationUser
 
-
-
 @using DoctorAppointmentManagement.Data
 @{
     Layout = "AdminLayout";
     ViewData["Title"] = "Edit";
 }
-
-<style>
-    section.card {
-        max-width: 500px;
-        margin: auto;
-        margin-top: 50px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        border-radius: 10px;
-        overflow: hidden;
-        justify-content: center;
-        align-items: center
-    }
-
-    .card-header {
-        background-color: #007bff;
-        color: white;
-        padding: 20px;
-        text-align: center;
-    }
-
-    .form-label {
-        font-weight: bold;
-    }
-
-    .form-control {
-        width: 100%;
-        padding: 10px;
-        margin: 8px 0;
-        display: inline-block;
-        border: 1px solid #ccc;
-        box-sizing: border-box;
-        border-radius: 5px;
-    }
-
-   
-</style>
 
 <section class="card">
     <form method="post" asp-action="EditUser" class="p-4" >

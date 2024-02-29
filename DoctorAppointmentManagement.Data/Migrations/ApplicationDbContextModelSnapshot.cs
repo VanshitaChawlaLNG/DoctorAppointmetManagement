@@ -33,19 +33,19 @@ namespace DoctorAppointmentManagement.Data.Migrations
                     b.Property<int>("DoctorId")
                         .HasColumnType("int");
 
-                    b.Property<int>("PatientId")
-                        .HasColumnType("int");
+                    b.Property<string>("PatientId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PatientName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("Timestamp")
-                        .HasColumnType("datetime2");
+                    b.Property<string>("Timestamp")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("DoctorId");
 
                     b.ToTable("Appointments");
                 });
@@ -117,7 +117,7 @@ namespace DoctorAppointmentManagement.Data.Migrations
                     b.ToTable("Doctors");
                 });
 
-            modelBuilder.Entity("DoctorAppointmentManagement.Contracts.TimeSlot", b =>
+            modelBuilder.Entity("DoctorAppointmentManagement.Contracts.Slots", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -136,9 +136,7 @@ namespace DoctorAppointmentManagement.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("TimingSlotsId");
-
-                    b.ToTable("TimeSlot");
+                    b.ToTable("Slots");
                 });
 
             modelBuilder.Entity("DoctorAppointmentManagement.Contracts.TimingSlots", b =>
@@ -369,28 +367,6 @@ namespace DoctorAppointmentManagement.Data.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("DoctorAppointmentManagement.Contracts.Appointment", b =>
-                {
-                    b.HasOne("DoctorAppointmentManagement.Contracts.Doctor", "Doctor")
-                        .WithMany()
-                        .HasForeignKey("DoctorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Doctor");
-                });
-
-            modelBuilder.Entity("DoctorAppointmentManagement.Contracts.TimeSlot", b =>
-                {
-                    b.HasOne("DoctorAppointmentManagement.Contracts.TimingSlots", "TimingSlots")
-                        .WithMany("Slots")
-                        .HasForeignKey("TimingSlotsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("TimingSlots");
-                });
-
             modelBuilder.Entity("DoctorAppointmentManagement.Contracts.TimingSlots", b =>
                 {
                     b.HasOne("DoctorAppointmentManagement.Contracts.Doctor", "Doctor")
@@ -456,11 +432,6 @@ namespace DoctorAppointmentManagement.Data.Migrations
             modelBuilder.Entity("DoctorAppointmentManagement.Contracts.Doctor", b =>
                 {
                     b.Navigation("timingSlots");
-                });
-
-            modelBuilder.Entity("DoctorAppointmentManagement.Contracts.TimingSlots", b =>
-                {
-                    b.Navigation("Slots");
                 });
 #pragma warning restore 612, 618
         }

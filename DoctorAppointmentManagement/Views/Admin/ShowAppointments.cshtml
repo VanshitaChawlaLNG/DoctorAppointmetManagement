@@ -1,0 +1,52 @@
+﻿@model IEnumerable<DoctorAppointmentManagement.Contracts.Appointment>
+@{
+    Layout = "AdminLayout";
+    ViewData["Title"] = "Appointments";
+}
+
+<section class="card">
+    <div class="card-header">
+        <h2>Show Appointments</h2>
+    </div>
+    
+
+    @using (Html.BeginForm())
+    {
+        <div class="table-responsive">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>@Html.DisplayNameFor(model => model.Id)</th>
+                        <th>@Html.DisplayNameFor(model => model.PatientId)</th>
+                        <th>@Html.DisplayNameFor(model => model.PatientName)</th>
+                        <th>@Html.DisplayNameFor(model => model.Timestamp)</th>
+                      
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var appointments in Model)
+                    {
+                        <tr>
+                            <td>@Html.DisplayFor(model => appointments.Id)</td>
+                            <td>@Html.DisplayFor(model => appointments.PatientId)</td>
+                            <td>@Html.DisplayFor(model => appointments.PatientName)</td>
+                            <td>@Html.DisplayFor(model => appointments.Timestamp)</td>
+                            
+                            <td>
+                               @*  <div class="btn-group" role="group">
+                                    <button type="button" class="btn btn-primary" onclick="location.href='@Url.Action("EditDoctor", "Admin", new { id = doctor.Id })'">
+                                        <i class="bi bi-pencil-square"></i>Edit
+                                    </button>
+                                    <button type="button" class="btn btn-danger" onclick="location.href='@Url.Action("DeleteDoctor", "Admin", new { id = doctor.Id })'">
+                                        <i class="bi bi-trash"></i>Delete
+                                    </button>
+                                </div> *@
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</section>
+

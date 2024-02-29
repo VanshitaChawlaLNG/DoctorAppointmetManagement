@@ -3,16 +3,17 @@ using DoctorAppointmentManagement.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Numerics;
 
 
 namespace DoctorAppointmentManagement.Services.AddTimingData
 {
-    public class TimingService : ITimingService
+    public class Timing : ITiming
     {
         private readonly ApplicationDbContext _db;
         private readonly UserManager<ApplicationUser> _userManager;
 
-        public TimingService(ApplicationDbContext db, UserManager<ApplicationUser> userManager)
+        public Timing(ApplicationDbContext db, UserManager<ApplicationUser> userManager)
         {
             _db = db;
             _userManager = userManager;
@@ -46,30 +47,33 @@ namespace DoctorAppointmentManagement.Services.AddTimingData
                 TimingSlots timingSlots = new TimingSlots
                 {
                     DoctorId = user.DoctorId,
-                    Date = availableTiming.Date,
-                    Slots = new List<TimeSlot>()
+                    Date = availableTiming.Date
+                    
                 };
-
+                _db.TimingSlots.Add(timingSlots);
+                await _db.SaveChangesAsync();
+                int insertedTimingSlotsId = timingSlots.Id;
                 TimeSpan startTime = new TimeSpan(availableTiming.StartTimeHours, availableTiming.StartTimeMins, 0);
-                TimeSpan endTime = new TimeSpan(availableTiming.EndTimeHours, availableTiming.EndTimeMins, 0);
+                TimeSpan endTime = new(availableTiming.EndTimeHours, availableTiming.EndTimeMins, 0);
                 TimeSpan slotDuration = TimeSpan.FromMinutes(30);
 
 
                 for (var i = startTime; i < endTime; i = i.Add(slotDuration))
                 {
-                    TimeSlot timeSlot = new TimeSlot
+                    Slots timeSlot = new Slots
                     {
                         StartTime = i,
                         EndTime = i.Add(slotDuration),
-                        TimingSlotsId = timingSlots.Id
-                    };
+                        TimingSlotsId = insertedTimingSlotsId 
 
-                    timingSlots.Slots.Add(timeSlot);
+                };
+
+                    _db.Slots.Add(timeSlot);
+                    await _db.SaveChangesAsync();
                 }
 
 
-                _db.TimingSlots.Add(timingSlots);
-                await _db.SaveChangesAsync();
+               
 
                 return new OkResult();
             }
