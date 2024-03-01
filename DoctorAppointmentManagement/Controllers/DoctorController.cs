@@ -14,12 +14,13 @@ namespace DoctorAppointmentManagement.Controllers
     {
         private readonly ITiming _timingServices;
        
-        private readonly UserManager<ApplicationUser> _userManager;  
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly ILogger<DoctorController> _logger;
 
-        public DoctorController(ITiming timingServices, UserManager<ApplicationUser> userManager)
+        public DoctorController(ITiming timingServices, UserManager<ApplicationUser> userManager,ILogger<DoctorController> logger)
         {
             _timingServices = timingServices;
-           
+            _logger = logger;
             _userManager = userManager;  
         }
 
@@ -75,6 +76,7 @@ namespace DoctorAppointmentManagement.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogInformation("Exception at Timing Adding");
                 Console.WriteLine($"An error occurred: {ex.Message}");
                 TempData["ErrorMessage"] = "An unexpected error occurred. Please contact support.";
                 return View();
@@ -99,6 +101,7 @@ namespace DoctorAppointmentManagement.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogInformation($"An Exception occurred at Showing Appointments of Doctor: {ex.Message}");
                 TempData["ErrorMessage"] = "Exception";
                
                 return RedirectToAction("Index","Home");

@@ -14,14 +14,15 @@ namespace DoctorAppointmentManagement.Controllers
     [Authorize(Roles = "Patient")]
     public class UserController : Controller
     {
-       
+        private readonly ILogger<UserController> _logger;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IAppointmentService _appointmentService;
         private readonly IUserService _userService;
         private readonly IWebHostEnvironment _webHostEnvironment;
 
-        public UserController( UserManager<ApplicationUser> userManager, IAppointmentService AppointmentServices,IUserService userService)
+        public UserController( UserManager<ApplicationUser> userManager, IAppointmentService AppointmentServices,IUserService userService,ILogger<UserController> logger)
         {
+            _logger = logger;
             _userService = userService;
             _userManager = userManager;
             _appointmentService = AppointmentServices;
@@ -50,7 +51,7 @@ namespace DoctorAppointmentManagement.Controllers
             }
             catch (Exception ex)
             {
-               
+                _logger.LogInformation($"An Exception occurred at appointment of Doctor: {ex.Message}");
                 TempData["ErrorMessage"] = "Failed to fetch timing slots. Please try again later.";
                 return View();
             }
@@ -94,6 +95,7 @@ namespace DoctorAppointmentManagement.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogInformation($"An Exception occurred at index of Doctor: {ex.Message}");
                 Console.WriteLine($"An error occurred: {ex.Message}");
                 TempData["ErrorMessage"] = "An error occurred while processing your request.";
                 return View();
@@ -123,6 +125,8 @@ namespace DoctorAppointmentManagement.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogInformation($"An Exception occurred " +
+                    $".: {ex.Message}");
                 Console.WriteLine($"An error occurred: {ex.Message}");
                 TempData["ErrorMessage"] = $"{ex.Message}.";
                 return View("Error");

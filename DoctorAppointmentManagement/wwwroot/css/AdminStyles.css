@@ -25,7 +25,8 @@ body, html {
 #CreateClass {
 	color: white;
 	background-color: black;
-	
+	display:flex;
+	align-items:center;
 	justify-content:center;
 	border-radius: 5px;
 	cursor: pointer;
@@ -37,7 +38,7 @@ body, html {
 
 .card-header {
 	background-color: #3F72AF;
-	color: skyblue;
+	color: #112D4E;
 	text-align: center;
 	padding: 1.5rem;
 	width: 100%;
@@ -57,7 +58,7 @@ a {
 	}
 .card {
 	margin: 6%;
-	background-color: #112D4E;
+	background-color: #3F72AF;
 }
 
 .wrapper {
@@ -165,7 +166,8 @@ a {
 				background: #fff;
 			}
 
-.main_container{
+.main_container {
+	background-color: #DBE2EF;
 	width: calc(100% - 250px);
 }
 

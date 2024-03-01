@@ -64,11 +64,11 @@
                 <span asp-validation-for="Fees" class="text-danger"></span>
             </div>
 
-             <input asp-for="Id" value="@Model.Id" hidden />
-            <input asp-for="ProfilePicture" value="@Model.ProfilePicture" hidden />
-            @* <input asp-for="timingSlots" value="Model.timingSlots" hidden /> *@
+              <input asp-for="Id" value="@Model.Id" hidden />
+            <input asp-for="ProfilePicture" value="@Model.ProfilePicture" hidden /> 
+             <input asp-for="timingSlots" value="@Model.timingSlots" hidden /> 
 
-            <input asp-for="ProfilePictureFile" value="@Model.ProfilePictureFile" hidden />
+            @* <input asp-for="ProfilePictureFile" value="@Model.ProfilePictureFile" hidden /> *@
             <button type="submit" class="btn btn-outline-primary" style="width:150px">Edit</button>
             <a asp-controller="Admin" asp-action="IndexDoctor" class="btn btn-secondary" style="width:150px">Back to List</a>
         </div>

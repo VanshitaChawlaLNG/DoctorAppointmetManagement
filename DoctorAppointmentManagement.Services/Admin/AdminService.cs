@@ -87,24 +87,16 @@ namespace DoctorAppointmentManagement.Services.Admin
 
             if (existingDoctor == null)
             {
-
                 return false;
             }
 
-            existingDoctor.Name = DoctorObj.Name;
-            existingDoctor.Description = DoctorObj.Description;
-            existingDoctor.Email = DoctorObj.Email;
-            existingDoctor.Password = DoctorObj.Password; // Assuming you want to update the password
-            existingDoctor.Fees = DoctorObj.Fees;
-
-
-
             _db.Entry(existingDoctor).CurrentValues.SetValues(DoctorObj);
 
-            var result=await _db.SaveChangesAsync();
+            
+            var result = await _db.SaveChangesAsync();
             return result > 0;
-
         }
+
 
         public async Task<bool> HasAppointmentsAsync(int doctorId)
         {

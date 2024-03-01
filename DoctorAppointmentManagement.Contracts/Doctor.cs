@@ -31,10 +31,10 @@ namespace DoctorAppointmentManagement.Contracts
         [NotMapped]
        
         [AllowedExtensions(new string[] { ".jpg", ".jpeg", ".png" }, ErrorMessage = "Only JPG, JPEG, and PNG files are allowed")]
-        public IFormFile ProfilePictureFile { get; set; }
+        public IFormFile? ProfilePictureFile { get; set; }
 
-        public string ProfilePicture { get; set; }
+        public string? ProfilePicture { get; set; }
 
-        public IEnumerable<TimingSlots> timingSlots { get; set; }
+        public IEnumerable<TimingSlots>? timingSlots { get; set; }
     }
 }

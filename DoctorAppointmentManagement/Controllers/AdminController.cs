@@ -18,10 +18,12 @@ namespace DoctorAppointmentManagement.Controllers
         private readonly ApplicationDbContext _db;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IWebHostEnvironment _webHostEnvironment;
+        private readonly ILogger<AdminController> _logger;
 
-        public AdminController(ApplicationDbContext db, UserManager<ApplicationUser> userManager ,IWebHostEnvironment webHostEnvironment,IAdminService adminService)
+        public AdminController(ApplicationDbContext db, UserManager<ApplicationUser> userManager ,IWebHostEnvironment webHostEnvironment,IAdminService adminService, ILogger<AdminController> logger)
         {
-            _adminService=adminService;
+            _logger = logger;
+           _adminService=adminService;
             _db = db;
             _userManager = userManager;
             _webHostEnvironment = webHostEnvironment;
@@ -39,7 +41,7 @@ namespace DoctorAppointmentManagement.Controllers
             
             catch (Exception ex)
             {
-                Console.WriteLine($"An Exception occurred: {ex.Message}");
+                _logger.LogInformation($"An Exception occurred at index of Doctor: {ex.Message}");
                 TempData["ErrorMessage"] = "Unwanted exception occur";
                 return View();
             }
@@ -101,12 +103,12 @@ namespace DoctorAppointmentManagement.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogInformation($"An Exception occurred at Creation of Doctor: {ex.Message}");
                 Console.WriteLine(ex.ToString());
                 TempData["ErrorMessage"] = "Exception";
                 return View();
             }
         }
-
 
 
         public async Task<IActionResult> DeleteDoctor(int Id)
@@ -116,7 +118,7 @@ namespace DoctorAppointmentManagement.Controllers
             if (doctor == null)
             {
                 TempData["ErrorMessage"] = "Unable to fetch data";
-                return NotFound(); 
+                return NotFound();
             }
 
             return View(doctor);
@@ -127,16 +129,26 @@ namespace DoctorAppointmentManagement.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int Id)
         {
-            var success = await _adminService.DeleteDoctorAndRelatedEntitiesAsync(Id);
-
-            if (success)
+            try
             {
-                TempData["SuccessMessage"] = "Doctor Deleted";
-                return RedirectToAction("IndexDoctor"); 
-            }
+                var success = await _adminService.DeleteDoctorAndRelatedEntitiesAsync(Id);
 
-            TempData["ErrorMessage"] = "Unable to delete. Appointments exist.";
-            return RedirectToAction("IndexDoctor"); 
+                if (success)
+                {
+                    TempData["SuccessMessage"] = "Doctor Deleted";
+                    return RedirectToAction("IndexDoctor");
+                }
+
+                TempData["ErrorMessage"] = "Unable to delete. Appointments exist.";
+                return RedirectToAction("IndexDoctor");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogInformation($"An Exception occurred at deletion of Doctor: {ex.Message}");
+                // Log the exception or handle it as needed
+                TempData["ErrorMessage"] = "An error occurred while deleting the doctor.";
+                return RedirectToAction("IndexDoctor");
+            }
         }
 
 
@@ -147,23 +159,24 @@ namespace DoctorAppointmentManagement.Controllers
                 if (Id <= 0)
                 {
                     TempData["ErrorMessage"] = "Invalid Doctor Id";
-                    return RedirectToAction("IndexDoctor");  // Redirect to the doctor list or another appropriate action
+                    return RedirectToAction("IndexDoctor"); 
                 }
 
                 var userDetails = await _adminService.FetchDoctorById(Id);
 
                 if (userDetails == null)
                 {
-                    return NotFound();  // Return a 404 Not Found result if the doctor is not found
+                    return NotFound(); 
                 }
 
                 return View(userDetails);
             }
             catch (Exception ex)
             {
+                _logger.LogInformation($"An Exception occurred at Editing  Doctor: {ex.Message}");
                 TempData["ErrorMessage"] = "An error occurred while fetching doctor details.";
-                // Log the exception if needed
-                return View("IndexDoctor");  // Redirect to the doctor list or another appropriate action
+               
+                return View("IndexDoctor"); 
             }
         }
 
@@ -175,9 +188,9 @@ namespace DoctorAppointmentManagement.Controllers
         {
             try
             {
-                
+                ModelState.Clear();
                 // Check if ModelState is valid
-                if (!ModelState.IsValid || doctorObj == null)
+                if (!ModelState.IsValid)
                 {
                     TempData["ErrorMessage"] = "Invalid or Missing Entries By The User";
                     return RedirectToAction("IndexDoctor"
@@ -198,6 +211,7 @@ namespace DoctorAppointmentManagement.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogInformation($"An Exception occurred at Updation of Doctor: {ex.Message}");
                 Console.WriteLine($"An error occurred: {ex.Message}");
                 TempData["ErrorMessage"] = "An error occurred while processing your request.";
                 return View(doctorObj);
@@ -208,9 +222,21 @@ namespace DoctorAppointmentManagement.Controllers
 
         public IActionResult IndexUser()
         {
-            IEnumerable<ApplicationUser> objUserList = _db.Users;
-            return View(objUserList);
+            try
+            {
+                IEnumerable<ApplicationUser> objUserList = _db.Users;
+                return View(objUserList);
+            }
+            catch (Exception ex)
+            {
+                // Log the exception (consider using a logging framework like Serilog or NLog)
+                _logger.LogInformation(ex, "An error occurred while fetching user data.");
+
+                TempData["ErrorMessage"] = "An error occurred while fetching user data.";
+                return RedirectToAction("Index"); // Redirect to a general error page or another suitable action
+            }
         }
+
 
 
         public async Task<IActionResult> ShowAppointments()
