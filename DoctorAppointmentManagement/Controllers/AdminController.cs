@@ -285,8 +285,8 @@ namespace DoctorAppointmentManagement.Controllers
             }
             return  View(userDetails);
         }
-*/
-        /*[HttpPost]
+
+        [HttpPost]
         [AutoValidateAntiforgeryToken]
         public IActionResult DeleteUser(ApplicationUser obj)
         {
@@ -297,7 +297,7 @@ namespace DoctorAppointmentManagement.Controllers
             TempData["success"] = "User Deleted";
             return RedirectToAction("IndexUser");
 
-        }
+        }/*
 
         public async Task<IActionResult> EditUser(string id)
         {
