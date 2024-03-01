@@ -78,7 +78,7 @@ namespace DoctorAppointmentManagement.Controllers
                 if (user == null)
                 {
                     TempData["ErrorMessage"] = "Failed to Fetch User. Please try again later.";
-                    return RedirectToAction("ShowAppointments");
+                    return View();
                 }
 
                 var result = await _appointmentService.DoctorAppointment(appointment, user);
@@ -86,11 +86,11 @@ namespace DoctorAppointmentManagement.Controllers
                 if (result)
                 {
                     TempData["SuccessMessage"] = "Data Inserted";
-                    return RedirectToAction("ShowAppointments");
+                    return View();
                 }
 
                 TempData["ErrorMessage"] = "Failed to Insert Data. Please try again.";
-                return RedirectToAction("ShowAppointments"); 
+                return View(); 
             }
             catch (Exception ex)
             {

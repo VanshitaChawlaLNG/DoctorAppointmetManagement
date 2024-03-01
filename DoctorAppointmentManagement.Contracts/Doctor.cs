@@ -29,7 +29,7 @@ namespace DoctorAppointmentManagement.Contracts
 
         [Display(Name = "Profile Picture")]
         [NotMapped]
-        [Required(ErrorMessage = "Profile picture is required")]
+       
         [AllowedExtensions(new string[] { ".jpg", ".jpeg", ".png" }, ErrorMessage = "Only JPG, JPEG, and PNG files are allowed")]
         public IFormFile ProfilePictureFile { get; set; }
 

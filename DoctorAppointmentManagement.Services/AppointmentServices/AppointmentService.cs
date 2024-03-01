@@ -28,7 +28,7 @@ namespace DoctorAppointmentManagement.Services
 
                 if (result == 0)
                 {
-                    // Log or handle the issue with saving the appointment
+                    
                     return false;
                 }
 
@@ -57,10 +57,7 @@ namespace DoctorAppointmentManagement.Services
                     // Remove Slots
                     _db.Slots.RemoveRange(slotsToDelete);
 
-                    // Remove TimingSlots
-                    var timingSlotToRemove = await _db.TimingSlots.FindAsync(timingSlotsId);
-                    _db.TimingSlots.Remove(timingSlotToRemove);
-
+                   
                     // Save changes
                     var saveResult = await _db.SaveChangesAsync();
 
@@ -95,10 +92,10 @@ namespace DoctorAppointmentManagement.Services
             // Your timestamp parsing logic here
 
             var parts = timestamp?.Split(" ");
-            if (parts != null && parts.Length == 6 &&
+            if (parts != null &&
                 DateTime.TryParse(parts[0], out date) &&
-                TimeSpan.TryParse(parts[3], out startTime) &&
-                TimeSpan.TryParse(parts[5], out endTime))
+                TimeSpan.TryParse(parts[1], out startTime) &&
+                TimeSpan.TryParse(parts[3], out endTime))
             {
                 return true;
             }

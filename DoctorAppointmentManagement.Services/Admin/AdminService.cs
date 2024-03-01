@@ -91,9 +91,12 @@ namespace DoctorAppointmentManagement.Services.Admin
                 return false;
             }
 
+            existingDoctor.Name = DoctorObj.Name;
+            existingDoctor.Description = DoctorObj.Description;
+            existingDoctor.Email = DoctorObj.Email;
+            existingDoctor.Password = DoctorObj.Password; // Assuming you want to update the password
+            existingDoctor.Fees = DoctorObj.Fees;
 
-            DoctorObj.ProfilePicture = existingDoctor.ProfilePicture;
-            DoctorObj.Password = existingDoctor.Password;
 
 
             _db.Entry(existingDoctor).CurrentValues.SetValues(DoctorObj);

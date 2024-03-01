@@ -9,6 +9,8 @@
     <link rel="stylesheet" href="~/css/Adminstyles.css" asp-append-version="true" />
     <script src="https://kit.fontawesome.com/b99e675b6e.js"></script>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+   
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
@@ -21,6 +23,7 @@
                
             </div>
             <div class="vertical_wrap">
+                <partial name="_NotifyPartial" />
                 <div class="backdrop"></div>
                 <div class="vertical_bar">
                     <div class="profile_info">
@@ -61,13 +64,19 @@
                     </ul>
                 </div>
             </div>
+           
             <div class="container">
+                
                 <main role="main" class="pb-3">
+                   
                     @RenderBody()
                 </main>
             </div>
         </div>
     </div>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
 
     @await RenderSectionAsync("Scripts", required: false)
     <script>

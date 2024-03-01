@@ -3,74 +3,78 @@
     ViewData["Title"] = "Add";
 }
 
-<div class="container">
-    <div class="row full-height justify-content-center">
-        <div class="col-12 text-center align-self-center py-5">
-            <div class="section pb-5 pt-5 pt-sm-2 text-center">
-                <label for="reg-log"></label>
-                <div class="card-3d-wrap mx-auto">
-                    <div class="card-3d-wrapper">
-                        <div class="card-front">
-                            <div class="center-wrap">
-                                <div class="section text-center">
-                                    <form method="post" asp-action="AddTimingpost" class="p-4">
+<div class="section" height="max-height">
+    <div class="container">
+        <div class="row full-height justify-content-center">
+            <div class="col-12 text-center align-self-center py-4 h-90">
+                <div class="section pb-2 pt-2 pt-sm-2 text-center">
+                    <label for="reg-log"></label>
+                    <div class="card-3d-wrap mx-auto">
+                        <div class="card-3d-wrapper">
+                            <div class="card-front">
+                                <div class="center-wrap">
+                                    <div class="section text-center">
+                                        <h4 class="mb-4">Add Timing</h4>
+                                        <form method="post" asp-action="AddTimingpost" class="p-4" id="timingForm">
 
-                                        <div id="validation-messages" class="text-danger mb-3"></div>
+                                            <div asp-validation-summary="All" class="text-danger"></div>
+                                            <div class="mb-3">
+                                                <label asp-for="Date" class="form-label">Date</label>
+                                                <input asp-for="Date" type="date" class="form-control" step="1" id="Date" required />
+                                                <span asp-validation-for="Date" class="text-danger"></span>
+                                            </div>
 
-                                        <div class="mb-3">
-                                            <label asp-for="Date" class="form-label">Date</label>
-                                            <input asp-for="Date" type="date" class="form-control" min="@DateTime.Now.ToString("yyyy-MM-dd")" step="86400" />
-                                            <span asp-validation-for="Date" class="text-danger"></span>
-                                        </div>
+                                            <div class="mb-3">
+                                                <label asp-for="StartTimeHours" class="form-label">Start Time in Hours</label>
+                                                <select asp-for="StartTimeHours" class="form-select" id="StartTimeHours">
+                                                    @for (int i = 0; i < 24; i++)
+                                                    {
+                                                        <option value="@i">@i</option>
+                                                    }
+                                                </select>
+                                                <span asp-validation-for="StartTimeHours" class="text-danger"></span>
+                                            </div>
 
-                                        <div class="mb-3">
-                                            <label asp-for="StartTimeHours" class="form-label">Start Time in Hours</label>
-                                            <select asp-for="StartTimeHours" class="form-select">
-                                                @for (int i = 0; i < 24; i++)
-                                                {
-                                                    <option value="@i">@i</option>
-                                                }
-                                            </select>
-                                            <span asp-validation-for="StartTimeHours" class="text-danger"></span>
-                                        </div>
+                                            <div class="mb-3">
+                                                <label asp-for="StartTimeMins" class="form-label">Start Time in Minutes</label>
+                                                <select asp-for="StartTimeMins" class="form-select" id="StartTimeMins">
+                                                    @for (int i = 0; i < 60; i += 5)
+                                                    {
+                                                        <option value="@i">@i</option>
+                                                    }
+                                                </select>
+                                                <span asp-validation-for="StartTimeMins" class="text-danger"></span>
+                                            </div>
 
-                                        <div class="mb-3">
-                                            <label asp-for="StartTimeMins" class="form-label">Start Time in Minutes</label>
-                                            <select asp-for="StartTimeMins" class="form-select">
-                                                @for (int i = 0; i < 60; i += 5)
-                                                {
-                                                    <option value="@i">@i</option>
-                                                }
-                                            </select>
-                                            <span asp-validation-for="StartTimeMins" class="text-danger"></span>
-                                        </div>
+                                            <div class="mb-3">
+                                                <label asp-for="EndTimeHours" class="form-label">End Time In Hours</label>
+                                                <select asp-for="EndTimeHours" class="form-select" id="EndTimeHours">
+                                                    @for (int i = 0; i < 24; i++)
+                                                    {
+                                                        <option value="@i">@i</option>
+                                                    }
+                                                </select>
+                                                <span asp-validation-for="EndTimeHours" class="text-danger"></span>
+                                            </div>
 
-                                        <div class="mb-3">
-                                            <label asp-for="EndTimeHours" class="form-label">End Time In Hours</label>
-                                            <select asp-for="EndTimeHours" class="form-select">
-                                                @for (int i = 0; i < 24; i++)
-                                                {
-                                                    <option value="@i">@i</option>
-                                                }
-                                            </select>
-                                            <span asp-validation-for="EndTimeHours" class="text-danger"></span>
-                                        </div>
+                                            <div class="mb-3">
+                                                <label asp-for="EndTimeMins" class="form-label">End Time In Minutes</label>
+                                                <select asp-for="EndTimeMins" class="form-select" id="EndTimeMins">
+                                                    @for (int i = 0; i < 60; i += 5)
+                                                    {
+                                                        <option value="@i">@i</option>
+                                                    }
+                                                </select>
+                                                <span asp-validation-for="EndTimeMins" class="text-danger"></span>
+                                            </div>
 
-                                        <div class="mb-3">
-                                            <label asp-for="EndTimeMins" class="form-label">End Time In Minutes</label>
-                                            <select asp-for="EndTimeMins" class="form-select">
-                                                @for (int i = 0; i < 60; i += 5)
-                                                {
-                                                    <option value="@i">@i</option>
-                                                }
-                                            </select>
-                                            <span asp-validation-for="EndTimeMins" class="text-danger"></span>
-                                        </div>
+                                            
 
-                                        <div class="d-grid gap-2">
-                                            <button type="submit" class="btn btn-primary" style="background-color: #007bff; color: #ffffff; padding:10px;border-radius:4px;">Create</button>
-                                        </div>
-                                    </form>
+                                            <div class="d-grid gap-2">
+                                                <button type="submit" class="btn btn-primary" style="background-color: #007bff; color: #ffffff; padding:10px;border-radius:4px;">Create</button>
+                                            </div>
+                                        </form>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -81,67 +85,66 @@
     </div>
 </div>
 
-@section Scripts {
-    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-    <script>
-        $(document).ready(function () {
-            // Disable previous dates for the Date input
-            var currentDate = new Date().toISOString().split('T')[0];
-            $('input[type="date"]').attr('min', currentDate);
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var form = document.getElementById('timingForm');
+        var dateInput = document.getElementById('Date');
+        var startTimeHoursSelect = document.getElementById('StartTimeHours');
+        var endTimeHoursSelect = document.getElementById('EndTimeHours');
+        var startTimeMinsSelect = document.getElementById('StartTimeMins');
+        var endTimeMinsSelect = document.getElementById('EndTimeMins');
 
-            // Disable end time options that are less than start time
-            $('select[name="StartTimeHours"], select[name="StartTimeMins"]').on('change', function () {
-                updateEndTimeOptions();
-            });
+        form.addEventListener('submit', function (event) {
+            var selectedDate = new Date(dateInput.value);
+            var currentDate = new Date();
+            var startTimeHours = parseInt(startTimeHoursSelect.value);
+            var startTimeMins = parseInt(startTimeMinsSelect.value);
+            var endTimeHours = parseInt(endTimeHoursSelect.value);
+            var endTimeMins = parseInt(endTimeMinsSelect.value);
 
-            $('select[name="EndTimeHours"], select[name="EndTimeMins"]').on('change', function () {
-                updateStartTimeOptions();
-            });
-
-            function updateEndTimeOptions() {
-                var selectedStartHour = parseInt($('select[name="StartTimeHours"]').val());
-                var selectedStartMin = parseInt($('select[name="StartTimeMins"]').val());
-
-                // Disable end time options that are less than start time
-                $('select[name="EndTimeHours"] option, select[name="EndTimeMins"] option').prop('disabled', false);
-
-                for (var i = 0; i < 24; i++) {
-                    if (i < selectedStartHour) {
-                        $('select[name="EndTimeHours"] option[value="' + i + '"]').prop('disabled', true);
-                    }
-                    else if (i === selectedStartHour) {
-                        $('select[name="EndTimeMins"] option').each(function () {
-                            if (parseInt($(this).val()) <= selectedStartMin) {
-                                $(this).prop('disabled', true);
-                            }
-                        });
-                    }
-                }
+            // Check if end time is greater than start time
+            if (endTimeHours < startTimeHours || (endTimeHours === startTimeHours && endTimeMins <= startTimeMins)) {
+                alert('End time must be greater than start time.');
+                event.preventDefault();
+                return;
             }
 
-            function updateStartTimeOptions() {
-                var selectedEndHour = parseInt($('select[name="EndTimeHours"]').val());
-                var selectedEndMin = parseInt($('select[name="EndTimeMins"]').val());
-
-                // Disable start time options that are greater than end time
-                $('select[name="StartTimeHours"] option, select[name="StartTimeMins"] option').prop('disabled', false);
-
-                for (var i = 0; i < 24; i++) {
-                    if (i > selectedEndHour) {
-                        $('select[name="StartTimeHours"] option[value="' + i + '"]').prop('disabled', true);
-                    }
-                    else if (i === selectedEndHour) {
-                        $('select[name="StartTimeMins"] option').each(function () {
-                            if (parseInt($(this).val()) >= selectedEndMin) {
-                                $(this).prop('disabled', true);
-                            }
-                        });
-                    }
-                }
+            // Check if values are default (not changed by the user)
+            if (startTimeHours === 0 && startTimeMins === 0 && endTimeHours === 0 && endTimeMins === 0) {
+                alert('Please select valid start and end times.');
+                event.preventDefault();
             }
         });
-    </script>
-}
+
+        dateInput.addEventListener('change', function () {
+            var currentDate = new Date();
+            var selectedDate = new Date(dateInput.value);
+
+            // If the selected date is today, dynamically adjust start and end time hours
+            if (selectedDate.toDateString() === currentDate.toDateString()) {
+                var currentHour = currentDate.getHours();
+
+                // Update options for start time hours
+                startTimeHoursSelect.innerHTML = '';
+                for (var i = currentHour; i < 24; i++) {
+                    var option = document.createElement('option');
+                    option.value = i;
+                    option.text = i;
+                    startTimeHoursSelect.appendChild(option);
+                }
+
+                // Set end time hours default value to start time
+                endTimeHoursSelect.value = startTimeHoursSelect.value;
+            } else {
+                // If the selected date is not today, reset start time hours to 0
+                startTimeHoursSelect.value = 0;
+            }
+        });
+    });
+</script>
+
 
 <style>
 
@@ -235,11 +238,11 @@
         position: relative;
         width: 440px;
         max-width: 100%;
-        height: 550px;
+        height: 650px;
         -webkit-transform-style: preserve-3d;
         transform-style: preserve-3d;
         perspective: 800px;
-        margin-top:-3%;
+        margin-top:-7%;
     }
 
     .card-3d-wrapper {

@@ -1,51 +1,76 @@
-﻿@model DoctorAppointmentManagement.Contracts.Doctor
+﻿
+@model DoctorAppointmentManagement.Contracts.Doctor
 @{
     Layout = "AdminLayout";
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Create";
 }
+<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+
+<style>
+    .card-header {
+        display: flex;
+        justify-content: center;
+        background-color: #007bff;
+        color: black;
+        width: fit-content;
+        padding: 15px; /* Adjusted padding */
+        text-align: center;
+        margin-bottom: 10px; /* Reduced top margin */
+    }
+
+    .card {
+        height: auto; /* Adjusted height to auto */
+        line-height: 1.5; /* Adjusted line height */
+    }
+</style>
+
 
 <section>
-
     <form method="post" asp-action="EditDoctor">
-        <input asp-for="Id" hidden />
         <div class="border p-3 mt-4">
             <div class="row pb-2">
                 <h2 class="text-primary">Edit Doctor</h2>
                 <hr />
             </div>
-            <div asp-validation-summary="All"></div>
+            
+
             <div class="mb-3">
                 <label asp-for="Name">Name</label>
                 <input asp-for="Name" class="form-control" value="@Model.Name" />
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
+
             <div class="mb-3">
-                <label asp-for="Description">Description
-                    <span asp-validation-for="Description" class="text-danger"></span>
-                </label>
+                <label asp-for="Description">Description</label>
                 <input asp-for="Description" class="form-control" value="@Model.Description" />
+                <span asp-validation-for="Description" class="text-danger"></span>
             </div>
+
             <div class="mb-3">
-                <label asp-for="Email">Email
-                    <span asp-validation-for="Email" class="text-danger"></span>
-                </label>
+                <label asp-for="Email">Email</label>
                 <input asp-for="Email" class="form-control" value="@Model.Email" />
+                <span asp-validation-for="Email" class="text-danger"></span>
             </div>
+
             <div class="mb-3">
-                <label asp-for="Password">Password
-                    <span asp-validation-for="Password" class="text-danger"></span>
-                </label>
+                <label asp-for="Password">Password</label>
                 <input asp-for="Password" type="password" class="form-control" />
+                <span asp-validation-for="Password" class="text-danger"></span>
             </div>
+
             <div class="mb-3">
-                <label asp-for="Fees">Fees
-                    <span asp-validation-for="Fees" class="text-danger"></span>
-                </label>
+                <label asp-for="Fees">Fees</label>
                 <input asp-for="Fees" class="form-control" value="@Model.Fees" />
+                <span asp-validation-for="Fees" class="text-danger"></span>
             </div>
+
+             <input asp-for="Id" value="@Model.Id" hidden />
+            <input asp-for="ProfilePicture" value="@Model.ProfilePicture" hidden />
+            @* <input asp-for="timingSlots" value="Model.timingSlots" hidden /> *@
+
+            <input asp-for="ProfilePictureFile" value="@Model.ProfilePictureFile" hidden />
             <button type="submit" class="btn btn-outline-primary" style="width:150px">Edit</button>
             <a asp-controller="Admin" asp-action="IndexDoctor" class="btn btn-secondary" style="width:150px">Back to List</a>
         </div>
     </form>
-
 </section>

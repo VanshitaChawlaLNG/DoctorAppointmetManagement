@@ -132,11 +132,11 @@ namespace DoctorAppointmentManagement.Controllers
             if (success)
             {
                 TempData["SuccessMessage"] = "Doctor Deleted";
-                return RedirectToAction("IndexDoctor", "Admin"); 
+                return RedirectToAction("IndexDoctor"); 
             }
 
             TempData["ErrorMessage"] = "Unable to delete. Appointments exist.";
-            return RedirectToAction("IndexDoctor", "Admin"); 
+            return RedirectToAction("IndexDoctor"); 
         }
 
 
@@ -163,7 +163,7 @@ namespace DoctorAppointmentManagement.Controllers
             {
                 TempData["ErrorMessage"] = "An error occurred while fetching doctor details.";
                 // Log the exception if needed
-                return RedirectToAction("IndexDoctor");  // Redirect to the doctor list or another appropriate action
+                return View("IndexDoctor");  // Redirect to the doctor list or another appropriate action
             }
         }
 
@@ -175,11 +175,13 @@ namespace DoctorAppointmentManagement.Controllers
         {
             try
             {
+                
                 // Check if ModelState is valid
                 if (!ModelState.IsValid || doctorObj == null)
                 {
                     TempData["ErrorMessage"] = "Invalid or Missing Entries By The User";
-                    return View();
+                    return RedirectToAction("IndexDoctor"
+                        );
                 }
 
                 var result = await _adminService.UpdateDoctorServices(doctorObj);
@@ -187,17 +189,18 @@ namespace DoctorAppointmentManagement.Controllers
                 if (result)
                 {
                     TempData["SuccessMessage"] = "Doctor Updated";
-                    return View(nameof(IndexDoctor));
+                    return RedirectToAction("IndexDoctor"
+                        );
                 }
 
                 TempData["ErrorMessage"] = "Failed to Update Doctor. Please try again.";
-                return RedirectToAction(nameof(IndexDoctor));
+                return View(doctorObj);
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"An error occurred: {ex.Message}");
                 TempData["ErrorMessage"] = "An error occurred while processing your request.";
-                return RedirectToAction(nameof(IndexDoctor));
+                return View(doctorObj);
             }
         }
 

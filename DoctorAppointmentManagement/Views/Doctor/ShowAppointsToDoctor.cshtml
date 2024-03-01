@@ -5,18 +5,18 @@
 @model IEnumerable<DoctorAppointmentManagement.Contracts.Appointment>
 
 <section>
-    <div class="form-body">
+    <div class="form-body" >
         <div class="row">
             <div class="form-holder">
                 <div class="form-content">
-                    <div class="form-items" style="background: #DBE2EF;">
+                    <div class="form-items" style="background: #112D4E; color:white;">
                         <h3>Your Appointments</h3>
                         <p>Fill in the data below.</p>
 
                         @if (Model.Any())
                         {
                             <div class="table-responsive">
-                                <table class="table table-bordered">
+                                <table class="table table-bordered" style="color:white">
                                     <thead>
                                         <tr>
                                             <th>@Html.DisplayNameFor(model => model.Id)</th>

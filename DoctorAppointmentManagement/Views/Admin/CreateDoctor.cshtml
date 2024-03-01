@@ -8,61 +8,54 @@
 
  <style>
    
-    .card-header {
-        display:flex;
-        justify-items:center;
-        background-color: #007bff;
-        color:black;
-        width:fit-content;
-        padding: 20px;
-        text-align: center;
-    }
+  
 
 </style>
 <div class="container">
-    <div class="row justify-content-center mt-4">
-        <div class="col-md-8 col-lg-6">
+    <div class="row justify-content-center ">
+        <div class="col-md-6 col-lg-6">
             <form method="post" asp-action="CreateDoctor" class="p-3" enctype="multipart/form-data">
 
                 <div class="card border-0">
-                    <div class="card-header bg-transparent text-center">
+                    <div class="card-header  text-center">
                         <h2 class="mb-0 fw-bold text-primary">Create Doctor</h2>
                     </div>
 
+
                     <div asp-validation-summary="All" class="alert alert-danger mt-2"></div>
 
-                    <div class="mb-2">
-                        <label asp-for="Name" class="form-label fs-5 text-secondary">Doctor Name</label>
+                    <div class="mb-1">
+                        <label asp-for="Name" class="form-label fs-7 text-secondary">Doctor Name</label>
                         <input asp-for="Name" class="form-control" style="word-wrap: break-word; overflow-wrap: break-word;" />
                         <span asp-validation-for="Name" class="text-danger"></span>
                     </div>
 
-                    <div class="mb-2">
-                        <label asp-for="Description" class="form-label fs-5 text-secondary">Description</label>
+                    <div class="mb-1">
+                        <label asp-for="Description" class="form-label fs-7 text-secondary">Description</label>
                         <input asp-for="Description" class="form-control" style="word-wrap: break-word; overflow-wrap: break-word;" />
                         <span asp-validation-for="Description" class="text-danger"></span>
                     </div>
 
-                    <div class="mb-2">
-                        <label asp-for="Email" class="form-label fs-5 text-secondary">Email</label>
+                    <div class="mb-1">
+                        <label asp-for="Email" class="form-label fs-7 text-secondary">Email</label>
                         <input asp-for="Email" class="form-control" style="word-wrap: break-word; overflow-wrap: break-word;" />
                         <span asp-validation-for="Email" class="text-danger"></span>
                     </div>
 
-                    <div class="mb-2">
-                        <label asp-for="Password" class="form-label fs-5 text-secondary">Password</label>
+                    <div class="mb-1">
+                        <label asp-for="Password" class="form-label fs-7 text-secondary">Password</label>
                         <input asp-for="Password" type="password" class="form-control" style="word-wrap: break-word; overflow-wrap: break-word;" />
                         <span asp-validation-for="Password" class="text-danger"></span>
                     </div>
 
-                    <div class="mb-2">
-                        <label asp-for="Fees" class="form-label fs-5 text-secondary">Fees</label>
+                    <div class="mb-1">
+                        <label asp-for="Fees" class="form-label fs-7 text-secondary">Fees</label>
                         <input asp-for="Fees" class="form-control" style="word-wrap: break-word; overflow-wrap: break-word;" />
                         <span asp-validation-for="Fees" class="text-danger"></span>
                     </div>
 
-                    <div class="mb-2">
-                        <label asp-for="ProfilePictureFile" class="form-label fs-5 text-secondary">Profile Picture</label>
+                    <div class="mb-1">
+                        <label asp-for="ProfilePictureFile" class="form-label fs-7 text-secondary">Profile Picture</label>
                         <div class="input-group">
                             <input asp-for="ProfilePictureFile" type="file" class="form-control" style="word-wrap: break-word; overflow-wrap: break-word;" />
                             <span asp-validation-for="ProfilePictureFile" class="text-danger"></span>
@@ -76,7 +69,7 @@
                         }
                     </div>
 
-                    <div class="d-grid gap-2">
+                    <div class="d-grid gap-1">
                         <button type="submit" class="btn btn-primary fs-5 fw-bold">Create</button>
                         <a asp-controller="Admin" asp-action="IndexDoctor" class="btn btn-secondary mt-2 fs-5 fw-bold">Back to List</a>
                     </div>

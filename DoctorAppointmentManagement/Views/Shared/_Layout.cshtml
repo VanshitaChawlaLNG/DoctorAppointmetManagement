@@ -29,7 +29,7 @@
                         <ul class="navbar-nav ms-auto">
                             @if (User.IsInRole("Patient"))
                             {
-                                
+
                                 <li class="nav-item">
                                     <a class="nav-link mx-2 active" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                                 </li>
@@ -58,16 +58,16 @@
                                     <a class="nav-link mx-2 active" asp-area="" asp-controller="Doctor" asp-action="AddTiming">Add Timing</a>
                                 </li>
                             }
-                            <partial name="_LoginPartial" />
-                        </ul>
-                    }
-                    else
-                    {
-                        <partial name="_LoginPartial" />
-                    }
+                            
 
-                    
-                    
+                            
+                           
+                        </ul>
+
+                    }
+                    <ul class="navbar-nav ">
+                        <li class="nav-item">
+                    <partial name="_LoginPartial" /></li></ul>
                 </div>
             </div>
         </nav>

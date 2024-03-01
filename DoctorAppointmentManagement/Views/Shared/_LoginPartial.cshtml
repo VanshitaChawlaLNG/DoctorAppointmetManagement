@@ -16,8 +16,13 @@
 }
 else
 {
-    <script>
-        window.location.href = "/Identity/Account/Login";
-    </script>
+
+    <li class="nav-item ms-auto">
+        <a class="nav-link mx-2 active" asp-area="Identity" asp-page="/Account/Login" title="Login">Login</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link mx-2 active" asp-area="Identity" asp-page="/Account/Register" title="Register">Register</a>
+    </li>
+   @*  <script>window.href.location</script> *@
 }
 
