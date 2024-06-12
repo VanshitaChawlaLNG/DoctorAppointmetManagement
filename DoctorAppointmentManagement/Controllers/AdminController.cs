@@ -56,7 +56,7 @@ namespace DoctorAppointmentManagement.Controllers
         [HttpPost]
         [AutoValidateAntiforgeryToken]
 
-        public async Task<IActionResult> CreateDoctor(Doctor doctor)
+        public async Task<IActionResult> CreateDoctors(Doctor doctor)
         {
             try
             {
