@@ -12,7 +12,7 @@ namespace DoctorAppointmentManagement.Controllers
         {
             _roleManager = roleManager;
         }
-        //List All The Roles 
+        //List All The Roles in doctor's  
         public IActionResult Index()
         {
             var roles = _roleManager.Roles;
